@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from chameleon import utils
+from chameleon.db import Database
 
 
 class DBCommandWrapper(object):
@@ -8,7 +9,7 @@ class DBCommandWrapper(object):
         """
         Calls :attr:`func`
         """
-        self.perform(*args, **kwargs)
+        self.perform.im_func(*args, **kwargs)
 
     def get_parser(self):
         return utils.parser_from_func(self.perform, skip=1)
