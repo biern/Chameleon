@@ -1,0 +1,68 @@
+# -*- coding: utf-8 -*-
+
+import os
+import MySQLdb as mdb
+
+from chameleon import utils
+
+
+class ConfigNotFoundException(ImportError):
+    msg = u"Chameleon was unable to find config file"
+
+
+class Database(object):
+    DEFAULTS = {
+        'host': '127.0.0.1',
+        'user': 'root',
+        'port': 3306,
+        }
+
+    con = None
+
+    def __init__(self, config=None):
+        """
+        if config is None => search filesystem tree up for 'chameleon_conf'
+        module
+        if config is string => load from file
+        if config is kwargs => use it
+
+        All keys from config go to MySQLdb.connect method.
+        """
+        if config is None:
+            config = self.discover_config()
+
+        if isinstance(config, str):
+            config = utils.dict_from_module(config)
+
+        if config is None:
+            raise ConfigNotFoundException()
+
+        self._config = config
+
+    def connect(self):
+        cfg = self.DEFAULTS.copy()
+        cfg.update(self._config['DATABASE'])
+        self.con = mdb.connect(**cfg)
+        return self.con
+
+    # MySQLdb connection api
+
+    def commit(self):
+        return self.con.commit()
+
+    def rollback(self):
+        return self.con.rollback()
+
+    def cursor(self, cls=None):
+        return self.con.cursor(cls)
+
+    def discover_config(self):
+        directory = os.path.dirname(os.path.abspath('.') + '/')
+        name = 'chameleon_conf'
+        config = None
+        while config is None and directory:
+            config = utils.dict_from_module(
+                os.path.join(directory, name))
+            directory = directory.rsplit(os.sep, 1)[0]
+
+        return config
