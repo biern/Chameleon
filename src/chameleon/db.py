@@ -3,7 +3,7 @@
 import os
 import MySQLdb as mdb
 
-from chameleon import utils
+import utils
 
 
 class ConfigNotFoundException(ImportError):

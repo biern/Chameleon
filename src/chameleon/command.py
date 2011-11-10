@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import utils
+from chameleon import utils
 
 
 class DBCommandWrapper(object):
@@ -10,9 +10,12 @@ class DBCommandWrapper(object):
         """
         self.perform(*args, **kwargs)
 
+    def get_parser(self):
+        return utils.parser_from_func(self.perform, skip=1)
+
     def shell_eval(self, argv):
         # TODO: Get default db
-        parser = utils.parser_from_func(self.perform, skip=1)
+        parser = self.get_parser()
         args = parser.parse_args(argv)
         print(vars(args))
 
