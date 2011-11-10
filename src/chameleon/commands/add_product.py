@@ -12,4 +12,4 @@ def add_product(db, title, stock, value=2):
     :param int stock: Liczba w magazynie
     :param float value: Cena
     """
-    pass
+    print("lol! dodałem produkt: {}; {}; {};".format(title, stock, value))
