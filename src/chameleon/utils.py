@@ -1,9 +1,38 @@
 # -*- coding: utf-8 -*-
+
 import argparse
 import inspect
+import os
 import re
+import sys
 
-# TODO: parse config file
+
+def dict_from_module(path):
+    """
+    Returns public module variables as a dict. If module was not found,
+    None is returned.
+
+    :param str path: Filesystem path to module, without '.py' at the end.
+    """
+    res = {}
+
+    directory, name = os.path.split(path)
+    # Solves problems of not being in package
+    sys.path.insert(0, os.path.abspath(directory))
+    try:
+        module = __import__(name)
+    except ImportError:
+        return None
+    finally:
+        sys.path = sys.path[1:]
+
+    for name in dir(module):
+        if name.startswith('_'):
+            continue
+
+        res[name] = getattr(module, name)
+
+    return res
 
 
 def parser_from_func(func, skip=0):
