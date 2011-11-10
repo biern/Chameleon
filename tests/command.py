@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, '../src')
 
-from chameleon.api import api
+from chameleon import api
 
 
 @api.register
