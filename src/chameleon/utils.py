@@ -35,7 +35,22 @@ def dict_from_module(path):
     return res
 
 
-def parser_from_func(func, skip=0):
+def add_subparsers(parser, subparsers_with_names):
+    # TODO
+    subparsers_new = parser.add_subparsers()
+
+    for name, sub in subparsers_with_names:
+        sub_new = subparsers_new.add_parser(
+            name, description=sub.description)
+
+        for action in sub._actions:
+            if action.option_strings and action.option_strings[0] == '-h':
+                continue
+
+            sub_new._add_action(action)
+
+
+def parser_from_func(func, skip=0, parser=None):
     """
     Creates argparse.parser based on given func args.
 
