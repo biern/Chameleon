@@ -37,7 +37,7 @@ def dict_from_module(path):
 
 def add_subparsers(parser, subparsers_with_names):
     # TODO
-    subparsers_new = parser.add_subparsers()
+    subparsers_new = parser.add_subparsers(dest='subparser')
 
     for name, sub in subparsers_with_names:
         sub_new = subparsers_new.add_parser(
