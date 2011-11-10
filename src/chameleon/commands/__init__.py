@@ -1,7 +1,5 @@
 import os
 
-print "init"
-
 for filename in os.listdir(os.path.dirname(__file__)):
     if filename.startswith("_") or not filename.endswith(".py"):
         continue
