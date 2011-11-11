@@ -5,11 +5,12 @@ from chameleon.db import Database
 
 
 class DBCommandWrapper(object):
-    def __call__(self, *args, **kwargs):
+    def __call__(self, db, *args, **kwargs):
         """
-        Calls :attr:`func`
+        Calls :attr:`perform` as an unbound function.
         """
-        self.perform.im_func(*args, **kwargs)
+        with db.conn:
+            self.perform.im_func(db, *args, **kwargs)
 
     def get_parser(self):
         return utils.parser_from_func(self.perform, skip=1)
