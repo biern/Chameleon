@@ -4,7 +4,7 @@ import sys
 
 sys.path.insert(0, '../src')
 
-from chameleon import api, parse, Database
+from chameleon import api, Database
 from chameleon.commands import add_product
 
 
@@ -22,7 +22,6 @@ def test_call(db, product_id, name, cost=1, etc='x', *args):
 
 
 if __name__ == "__main__":
-    # parse()
     # Domyślne ustawienia bazy danych są zapisane w 'chameleon_conf.py',
     # można je też przeładować w konstruktorze:
     # Database(host='localhost', user='root', etc)

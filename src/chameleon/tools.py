@@ -2,10 +2,10 @@
 
 import argparse
 
-from chameleon import api, utils, Database
+from chameleon import Database, api, utils
 
 
-def parse(argv=None):
+def shell_eval(argv=None):
     parser = argparse.ArgumentParser(
         prog='chameleon',
         description="Chameleon command line API")

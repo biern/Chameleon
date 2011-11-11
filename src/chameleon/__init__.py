@@ -1,4 +1,4 @@
 from library import api
 from db import Database
-from parser import parse
+from tools import shell_eval
 import commands
