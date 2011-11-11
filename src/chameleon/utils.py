@@ -35,19 +35,17 @@ def dict_from_module(path):
     return res
 
 
-def add_subparsers(parser, subparsers_with_names):
-    # TODO
-    subparsers_new = parser.add_subparsers(dest='subparser')
-
-    for name, sub in subparsers_with_names:
-        sub_new = subparsers_new.add_parser(
+def add_subparsers(subparser, parsers_with_names):
+    for name, sub in parsers_with_names:
+        sub_copy = subparser.add_parser(
             name, description=sub.description)
 
         for action in sub._actions:
-            if action.option_strings and action.option_strings[0] == '-h':
+            if action.option_strings and \
+                    action.option_strings[1] == '--help':
                 continue
 
-            sub_new._add_action(action)
+            sub_copy._add_action(action)
 
 
 def parser_from_func(func, skip=0, parser=None):
