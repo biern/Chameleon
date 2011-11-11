@@ -42,7 +42,7 @@ def add_subparsers(subparser, parsers_with_names):
 
         for action in sub._actions:
             if action.option_strings and \
-                    action.option_strings[1] == '--help':
+                    action.option_strings[0] == '-h':
                 continue
 
             sub_copy._add_action(action)
