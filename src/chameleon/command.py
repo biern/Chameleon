@@ -30,7 +30,7 @@ class DBCommandWrapper(object):
         args, varargs, keywords, defaults = inspect.getargspec(
             self.perform.im_func)
         return [getattr(namespace, name) for name in args if name != 'db'] + \
-            getattr(namespace, varargs, [])
+            (getattr(namespace, varargs, []) if varargs else [])
 
     def call_from_namespace(self, db, namespace):
         """
