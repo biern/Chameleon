@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from chameleon.parser import parse
+from chameleon import shell_eval
 
 
 if __name__ == "__main__":
-    parse()
+    shell_eval()
