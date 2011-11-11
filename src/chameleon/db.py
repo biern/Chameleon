@@ -43,19 +43,19 @@ class Database(object):
     def connect(self):
         cfg = self.DEFAULTS.copy()
         cfg.update(self._config['DATABASE'])
-        self.con = mdb.connect(**cfg)
-        return self.con
+        self.conn = mdb.connect(**cfg)
+        return self.conn
 
     # MySQLdb connection api
 
     def commit(self):
-        return self.con.commit()
+        return self.conn.commit()
 
     def rollback(self):
-        return self.con.rollback()
+        return self.conn.rollback()
 
     def cursor(self, cls=None):
-        return self.con.cursor(cls)
+        return self.conn.cursor(cls)
 
     def discover_config(self):
         directory = os.path.dirname(os.path.abspath('.') + '/')
