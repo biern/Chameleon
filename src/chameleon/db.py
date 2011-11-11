@@ -39,6 +39,7 @@ class Database(object):
             raise ConfigNotFoundException()
 
         self._config = config
+        self.connect()
 
     def connect(self):
         cfg = self.DEFAULTS.copy()
