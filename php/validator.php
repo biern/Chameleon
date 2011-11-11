@@ -49,12 +49,12 @@ class validator
 	    
 		if ($options['exclude'] AND is_array($options['exclude'])) {
 			if ( !is_array($this->_exclude['values']) ) {
-				$options['exclude']['values'] = Array($options['exclude']['values']);
+				$options['values'] = Array($options['values']);
 			}
 			
-			$excludedValues = implode(', ', $options['exclude']['values']);
+			$excludedValues = implode(', ', $options['values']);
 			
-			$sql .= "AND NOT ".$options['exclude']['column']." IN ({$excludedValues})";
+			$sql .= "AND NOT ".$options['column']." IN ({$excludedValues})";
 		}
 		
 		$stmt = $this->db->prepare($sql);

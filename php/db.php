@@ -14,7 +14,7 @@ class db
         $dsn = 'mysql:dbname='.$dbname.';host=localhost';
         
         try {
-            $this->dbh = new PDO($dsn, $user, $password, array(PDO::ATTR_PERSISTENT => true));
+            $this->dbh = new PDO($dsn, $user, $password, array(PDO::ATTR_PERSISTENT => true, PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
         } catch (PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }

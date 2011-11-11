@@ -12,6 +12,7 @@ class deliverer extends modules
      * @param string $www Www address
      * @param string $email Email (required, email)
      * @param integer $photoId = 1
+     * @return integer $delivererId
      */
     public function add($delivererId, $name, $www, $email, $photoId = 1)
     {
@@ -44,5 +45,6 @@ class deliverer extends modules
 		$stmt->setInt('languageid', $this->languageId);
 		$stmt->execute();	
         
+		return $delivererId;
     }
 }

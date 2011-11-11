@@ -61,7 +61,7 @@ class chameleon
         {
             // If exist - run method
             //$instance->$action($arguments);
-            call_user_func_array(array($instance, $action), $arguments);
+            return call_user_func_array(array($instance, $action), $arguments);
         }
         else 
         {

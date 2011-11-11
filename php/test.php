@@ -12,5 +12,9 @@ $api = new chameleon();
 // Setup userId
 $api->setUserId = 1;
 
-$api->delivererAdd(0, 'Fabryka maszyn', 'http://www.fabryka.pl', 'dostawca@niepodam.pl');
+$delivererId = $api->delivererAdd(0, 'Fabryka maszyn', 'http://www.fabryka.pl', 'dostawca@niepodam.pl');
 
+$producerId = $api->producerAdd(0, 'Producent szklanek', 'http://www.szklanki.pl', 'A to opis producenta',
+				  'Keyword tytuł', 'Keywords słowa', 'Keyword opis');
+
+$api->producerAddDeliverer($delivererId, $producerId);
