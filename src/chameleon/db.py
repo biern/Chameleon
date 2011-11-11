@@ -15,6 +15,7 @@ class Database(object):
         'host': '127.0.0.1',
         'user': 'root',
         'port': 3306,
+        'connect_timeout': 3,
         }
 
     con = None

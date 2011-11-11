@@ -4,6 +4,7 @@ DATABASE = {
     'passwd': '',
     'host': '',
     'port': 3306,
+    'connect_timeout': 3,
 }
 
 try:
