@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import inspect
+
 from chameleon import utils
 from chameleon.db import Database
 
@@ -15,11 +17,26 @@ class DBCommandWrapper(object):
     def get_parser(self):
         return utils.parser_from_func(self.perform, skip=1)
 
-    def shell_eval(self, argv):
-        # TODO: Get default db
+    def shell_eval(self, argv=None):
         parser = self.get_parser()
         args = parser.parse_args(argv)
-        print(vars(args))
+        return self.call_from_namespace(Database(), args)
+
+    def args_from_namespace(self, namespace):
+        """
+        Returns ordered argument list for :meth:`perform`
+        based on namespace returned by ``self.get_parser().parse_args()``.
+        """
+        args, varargs, keywords, defaults = inspect.getargspec(
+            self.perform.im_func)
+        return [getattr(namespace, name) for name in args if name != 'db'] + \
+            getattr(namespace, varargs, [])
+
+    def call_from_namespace(self, db, namespace):
+        """
+        Transletes namespace to :meth:`perform` arguments and calls it.
+        """
+        self(db, *self.args_from_namespace(namespace))
 
     @classmethod
     def for_func(cls, func):

@@ -14,8 +14,5 @@ def shell_eval(argv=None):
         [(k, v.get_parser()) for k, v in api.items()])
     args = parser.parse_args(argv)
     func = api[args.subparser]
-    kwargs = vars(args)
-    kwargs.pop('subparser')
-    kwargs.pop('args')
-    print kwargs
-    func(Database(), **kwargs)
+    f_args = func.args_from_namespace(args)
+    func(Database(), *f_args)
