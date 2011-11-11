@@ -18,7 +18,7 @@ class Database(object):
         'connect_timeout': 3,
         }
 
-    con = None
+    conn = None
 
     def __init__(self, config=None):
         """
