@@ -7,6 +7,10 @@ DATABASE = {
     'connect_timeout': 3,
 }
 
+DEFAULT_ARGS = {
+    'userid': 1,
+    }
+
 try:
     from local_conf import DATABASE as LOCAL
     DATABASE.update(LOCAL)
