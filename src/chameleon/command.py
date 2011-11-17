@@ -57,19 +57,25 @@ class DBCommandWrapper(object):
 
     def args_from_namespace(self, namespace):
         """
-        Returns ordered argument list for :meth:`perform`
+        Returns tuple (args, kwargs) for :meth:`perform`
         based on namespace returned by ``self.get_parser().parse_args()``.
         """
         args, varargs, keywords, defaults = inspect.getargspec(
             self.perform.im_func)
-        return [getattr(namespace, name) for name in args if name != 'db'] + \
+        pos_args = [
+            getattr(namespace, name) for name in self.args if name != 'db'] + \
             (getattr(namespace, varargs, []) if varargs else [])
+        kw_args = dict(
+                (k, getattr(namespace, k)) for k in self.keyword_args
+                 )
+        return pos_args, kw_args
 
     def call_from_namespace(self, db, namespace):
         """
         Transletes namespace to :meth:`perform` arguments and calls it.
         """
-        self(db, *self.args_from_namespace(namespace))
+        args, kwargs = self.args_from_namespace(namespace)
+        self(db, *args, **kwargs)
 
     @classmethod
     def for_func(cls, func):
