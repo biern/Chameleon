@@ -47,6 +47,10 @@ class Database(object):
         self.conn = mdb.connect(**cfg)
         return self.conn
 
+    def validate(self, name, value, tags):
+        # TODO: stub
+        pass
+
     # MySQLdb connection api
 
     def commit(self):
