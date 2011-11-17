@@ -10,6 +10,10 @@ class ConfigNotFoundException(ImportError):
     msg = u"Chameleon was unable to find config file"
 
 
+class ValidationError(Exception):
+    pass
+
+
 class Database(object):
     DEFAULTS = {
         'host': '127.0.0.1',
@@ -47,9 +51,11 @@ class Database(object):
         self.conn = mdb.connect(**cfg)
         return self.conn
 
-    def validate(self, name, value, tags):
+    def validate(self, name, value, *options):
         # TODO: stub
-        pass
+        if 'required' in options:
+            if not value:
+                raise ValidationError(u'Field "{}" is required'.format(name))
 
     # MySQLdb connection api
 
