@@ -38,12 +38,12 @@ class Database(object):
         if config is None:
             raise ConfigNotFoundException()
 
-        self._config = config
+        self.config = config
         self.connect()
 
     def connect(self):
         cfg = self.DEFAULTS.copy()
-        cfg.update(self._config['DATABASE'])
+        cfg.update(self.config['DATABASE'])
         self.conn = mdb.connect(**cfg)
         return self.conn
 
