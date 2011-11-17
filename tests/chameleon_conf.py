@@ -9,6 +9,7 @@ DATABASE = {
 
 DEFAULT_ARGS = {
     'userid': 1,
+    'languageid': 1,
     }
 
 try:
