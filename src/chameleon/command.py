@@ -7,20 +7,53 @@ from chameleon.db import Database
 
 
 class DBCommandWrapper(object):
+    def __init__(self):
+        args, varargs, keywords, defaults = inspect.getargspec(
+            self.perform.im_func)
+
+        self.defaults = defaults or []
+        self.args = args[:-len(defaults)] if defaults else args
+        self.keyword_args = args[-len(defaults):]
+
     def __call__(self, db, *args, **kwargs):
         """
         Calls :attr:`perform` as an unbound function.
         """
         with db.conn:
-            self.perform.im_func(db, *args, **kwargs)
+            self.perform.im_func(db, *args, **self.add_defaults(db, kwargs))
 
-    def get_parser(self):
-        return utils.parser_from_func(self.perform, skip=1)
+    def add_defaults(self, db, kwargs):
+        """
+        Adds values from 'DEFAULT_ARGS' config to keyword args if they where
+        not supplied explicitly
+        """
+        res = kwargs.copy()
+        for k, v in self.get_config_default_args(db).items():
+            res.setdefault(k, v)
+
+        return res
+
+    def get_parser(self, db=None):
+        parser = utils.parser_from_func(
+            self.perform, skip=1,
+            override_defaults=self.get_config_default_args(db))
+
+        return parser
+
+    def get_config_default_args(self, db):
+        """
+        Returns dict of args found in db.config['DEFAULT_ARGS'] that match
+        keywords of this command.
+        """
+        return dict(
+            (k, v) for k, v in db.config.get('DEFAULT_ARGS', {}).items() if \
+                k in self.keyword_args)
 
     def shell_eval(self, argv=None):
-        parser = self.get_parser()
+        db = Database()
+        parser = self.get_parser(db=db)
         args = parser.parse_args(argv)
-        return self.call_from_namespace(Database(), args)
+        return self.call_from_namespace(db, args)
 
     def args_from_namespace(self, namespace):
         """
