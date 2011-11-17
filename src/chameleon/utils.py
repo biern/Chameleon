@@ -48,7 +48,7 @@ def add_subparsers(subparser, parsers_with_names):
             sub_copy._add_action(action)
 
 
-def parser_from_func(func, skip=0, parser=None):
+def parser_from_func(func, skip=0, parser=None, override_defaults={}):
     """
     Creates argparse.parser based on given func args.
 
@@ -88,15 +88,21 @@ def parser_from_func(func, skip=0, parser=None):
         kwargs.update(docs_data.get(arg, {}))
 
         # Default arg
-        default = None
         default_index = i - len(args) + len(defaults)
         if default_index >= 0:
-            default = kwargs['default'] = defaults[default_index]
+            kwargs['default'] = defaults[default_index]
+
+        try:
+            kwargs['default'] = override_defaults[arg]
+        except KeyError:
+            pass
+
+        if 'default' in kwargs.keys():
             kwargs['help'] = "{} (default: {})".format(
-                kwargs.get('help', ''), default)
+                kwargs.get('help', ''), kwargs['default'])
 
         # Name + optional arg or not
-        flags = ['--{}'.format(arg) if default else arg]
+        flags = ['--{}'.format(arg) if 'default' in kwargs.keys() else arg]
 
         parser.add_argument(*flags, **kwargs)
 
