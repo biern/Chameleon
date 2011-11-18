@@ -4,7 +4,8 @@ from chameleon import api
 
 
 @api.register
-def deliverer_add(db, name, www, email, photoid=1, delivererid=0,
+def deliverer_add(db, name, www, email,
+                  photoid=1, delivererid=0,
                   userid=None, languageid=None):
     """
     Add deliverer or translation
@@ -14,11 +15,11 @@ def deliverer_add(db, name, www, email, photoid=1, delivererid=0,
     :param str www: www address
     :param str email: Email (required, email)
     :param int photoid:
-    :return: Added deliverer id
+    :return: Added / updated deliverer id
     """
     db.validate('name', name, 'required',
-                'language_unique',
-                {'table': 'deliverertranslation', 'column': 'name'})
+                ('language_unique',
+                 {'table': 'deliverertranslation', 'column': 'name'}))
     db.validate('email', email, 'required', 'email')
     db.validate('languageid', languageid, 'required')
 
