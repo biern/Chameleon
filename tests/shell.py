@@ -6,6 +6,10 @@ import sys
 
 sys.path.insert(0, '../src')
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 from chameleon import shell_eval
 
 
