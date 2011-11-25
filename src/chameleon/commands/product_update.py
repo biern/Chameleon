@@ -3,6 +3,9 @@
 from chameleon import api
 
 
+PRODUCT_UPDATE_ATTRS = ['value', 'title']
+
+
 @api.register
 def product_update(db, productid, attr, value):
     """
