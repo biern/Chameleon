@@ -13,7 +13,7 @@ class DBCommandWrapper(object):
 
         self.defaults = defaults or []
         self.args = args[:-len(defaults)] if defaults else args
-        self.keyword_args = args[-len(defaults):]
+        self.keyword_args = args[-len(defaults):] if defaults else []
 
     def __call__(self, db, *args, **kwargs):
         """
@@ -65,9 +65,16 @@ class DBCommandWrapper(object):
         pos_args = [
             getattr(namespace, name) for name in self.args if name != 'db'] + \
             (getattr(namespace, varargs, []) if varargs else [])
-        kw_args = dict(
+
+        # Fixes "got multiple values for keyword argument (...)"
+        if varargs:
+            pos_args = [getattr(namespace, k) for k in self.keyword_args] +\
+                pos_args
+            kw_args = {}
+        else:
+            kw_args = dict(
                 (k, getattr(namespace, k)) for k in self.keyword_args
-                 )
+                )
         return pos_args, kw_args
 
     def call_from_namespace(self, db, namespace):
