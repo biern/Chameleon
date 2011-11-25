@@ -4,7 +4,9 @@ from chameleon import api
 
 
 @api.register
-def product_add(db, title, stock, value, unit=2, userid=None):
+def product_add(db, title, stock, value,
+                unit=2,
+                userid=None):
     """
     Some docs
 
@@ -12,6 +14,7 @@ def product_add(db, title, stock, value, unit=2, userid=None):
     :param int stock: Liczba w magazynie
     :param float value: Cena
     """
+    # STUB
     cur = db.cursor()
     query = """
         INSERT INTO product SET
