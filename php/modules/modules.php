@@ -1,8 +1,8 @@
 <?php
 
-require_once('db.php');
+require_once('./db.php');
 
-require_once('validator.php');
+require_once('./validator.php');
 
 /**
  * Modules main class
@@ -40,5 +40,10 @@ class modules
         {
             $this->valid->$type($name, $value);
         }
+    }
+    
+    public function commaToDot($value)
+    {
+        return str_replace(',', '.', $value);
     }
 }
