@@ -4,47 +4,105 @@ from chameleon import api
 
 
 @api.register
-def product_add(db, title, stock, value,
-                unit=2,
-                userid=None):
+def product_add(db, name, url, stock, vatid, buyprice, sellprice, weight, languageid=None, userid=None):
     """
-    Some docs
+    Add product
+    :param str name:
+    :param str url: 
+	:param int stock:
+	:param int vatiId:
+	:param float buyprice:
+	:param float sellprice:
+	:param float weight:
+	:param int languageid:
+    :param int userid:
+	:return: Product id
+    """
 
-    :param str title: Nazwa produktu
-    :param int stock: Liczba w magazynie
-    :param float value: Cena
-    """
-    # STUB
     cur = db.cursor()
-    query = """
-        INSERT INTO product SET
-        producerid =NULL,
-        stock=%(stock)s,
-        trackstock=0,
-        shippingcost=0,
-        enable=1,
-        weight=1,
-        width=NULL,
-        height=NULL,
-        deepth=NULL,
-        unit=%(unit)s,
-        vatid=3,
-        ean='',
-        delivelercode='',
-        buyprice=0,
-        sellprice=0,
-        buycurrencyid = 28,
-        sellcurrencyid = 28,
-        addid=1,
-        technicaldatasetid=NULL,
-        promotion = 0,
-        discountprice = 0,
-        promotionstart = NULL,
-        promotionend = NULL
+    sql = """
+        INSERT INTO product (
+            idproduct, 
+            stock, 
+            vatid, 
+            buyprice, 
+            sellprice, 
+            weight,
+            addid
+        )
+		VALUES
+		(
+		    NULL, 
+		    %(stock)s, 
+		    %(vatid)s,
+		    %(buyprice)s, 
+		    %(sellprice)s, 
+		    %(weight)s, 
+		    %(addid)s
+		)
         """
-    cur.execute(query, dict(
-            stock=stock,
-            unit=unit))
+    data = {}
+    data['stock'] = stock
+    data['vatid'] = vatid
+    data['buyprice'] = buyprice
+    data['sellprice'] = sellprice
+    data['weight'] = weight
+    data['addid'] = userid
+
+    cur = db.cursor()
+    cur.execute(sql, data)
+    db.commit()
+    
+    productid = cur.lastrowid     
+    
+    sql = """
+        INSERT INTO producttranslation (
+            productid, 
+            name, 
+            seo, 
+            languageid
+        )
+		VALUES
+		(
+		    %(productid)s,
+		    %(name)s, 
+		    %(url)s, 
+		    %(languageid)s
+		)
+        """
+    data = {}
+    data['productid'] = productid
+    data['name'] = name
+    data['url'] = url
+    data['languageid'] = languageid
+
+    cur = db.cursor()
+    cur.execute(sql, data)
+    db.commit()
+    
+    sql = """
+        INSERT INTO productsearch (
+            productid, 
+            languageid, 
+            name
+        )
+		VALUES
+		(
+		    %(productid)s, 
+		    %(languageid)s, 
+		    %(name)s
+		)
+        """
+    data = {}
+    data['productid'] = productid
+    data['languageid'] = languageid
+    data['name'] = name
+
+    cur = db.cursor()
+    cur.execute(sql, data)
+    db.commit()
+    
+    return productid
 
     # # Przykład bez mapowania nazw:
     # query = """
@@ -70,4 +128,3 @@ def product_add(db, title, stock, value,
 
     # I tak potrzeba jeszcze kilka zapytań dopisać (przykłdowy log z
     # dodawania produktu jest w db_logs)
-    db.commit()
