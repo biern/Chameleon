@@ -12,12 +12,12 @@ def producer_add(db, name, www, description,
     Add producer or translation
 
     :param int producerid: If greater than 0, add only translation
-    :param str name Name (required, languageUnique)
+    :param str name: Name (required, language_unique)
     :param str www: WWW address
     :param str email: Email (required, email)
     :param str keyword_title: Keyword title
     :param str keyword: Keywords
-    :param str keywordDescription: Keywords description
+    :param str keyword_description: Keywords description
     :param int photoid:
     :param int languageid:
     :param int userid:
