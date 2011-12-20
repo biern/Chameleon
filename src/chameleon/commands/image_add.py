@@ -119,6 +119,6 @@ def image_add(db, filename, userid=None, root_path=None, shopid=None):
 
         thumb.save(os.path.join(path, filename))
 
-    img.save(os.path.join(gallery_dir, "original", filename))
+    img.save(os.path.join(gallery_dir, "_orginal", filename))
 
     return imageid
