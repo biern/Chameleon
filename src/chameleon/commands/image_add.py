@@ -7,7 +7,7 @@ import mimetypes
 # TODO: image_add
 
 @api.register
-def add_image(db, filename, userid=None, root_path=None):
+def image_add(db, filename, userid=None, root_path=None):
     """
     Add image to gekosale
     :param str filename:
