@@ -13,12 +13,12 @@ if __name__ == "__main__":
     uniqId = str(int(time.time()))
 
     # Utworzenie nowej kategorii
-    categoryId = category_add(Database(), "Nowa kategoria "+uniqId, "nowa_kategoria_url", "Krótki opis",
+    categoryId = category_add(Database(), "Nowa kategoria "+uniqId, "nowa_kategoria_url_"+uniqId, "Krótki opis",
                                           "Dłuższy opis", "Meta tytuł", "Słowa kluczowe",
                                           "Meta opis")
 
     # Utworzenie głównej kategorii
-    mainCategoryId = category_add(Database(), "Nowa kategoria główna "+uniqId, "nowa_kategoria_glowna_url", "Krótki opis główny",
+    mainCategoryId = category_add(Database(), "Nowa kategoria główna "+uniqId, "nowa_kategoria_glowna_url_"+uniqId, "Krótki opis główny",
                                           "Dłuższy opis główny", "Meta tytuł główny", "Słowa kluczowe główne",
                                           "Meta opis główne")
 
