@@ -20,8 +20,8 @@ class DBCommandWrapper(object):
         Calls :attr:`perform` as an unbound function.
         """
         with db.conn:
-            self.perform.im_func(db, *args,
-                                 **self.add_defaults(db, kwargs, args))
+            return self.perform.im_func(db, *args,
+                                        **self.add_defaults(db, kwargs, args))
 
     def add_defaults(self, db, kwargs, args=[]):
         """
