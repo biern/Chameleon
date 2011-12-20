@@ -4,18 +4,18 @@ from chameleon import api
 
 
 @api.register
-def category_add(db, name, www, short_description = '', description = '',
-                 keyword_title = '', keyword = '', keyword_description = '',
-                 distinction = 1, enable = 1, languageid=None, userid=None):
+def category_add(db, name, www, short_description='', description='',
+                 keyword_title='', keyword='', keyword_description='',
+                 distinction=1, enable=1, languageid=None, userid=None):
     """
-    Add category     
+    Add category
 
-    :param str name: 
+    :param str name:
     :param str www:
     :param str short_description:
     :param str description:
     :param str keyword_title:
-    :param str keyword: 
+    :param str keyword:
     :param str keywordDescription:
     :param int distinction:
     :param int enable:
@@ -23,22 +23,22 @@ def category_add(db, name, www, short_description = '', description = '',
     :param int userid:
     :return: Category Id
     """
-    
+
     cur = db.cursor()
 
     sql = """
             INSERT INTO category
             (
-                categoryid, 
-                addid, 
-                distinction, 
+                categoryid,
+                addid,
+                distinction,
                 enable
             )
             VALUES
             (
-                NULL, 
-                %(addid)s, 
-                %(distinction)s, 
+                NULL,
+                %(addid)s,
+                %(distinction)s,
                 %(enable)s
             )
         """
@@ -50,32 +50,32 @@ def category_add(db, name, www, short_description = '', description = '',
     cur = db.cursor()
     cur.execute(sql, data)
     db.commit()
-    
-    categoryid = cur.lastrowid 
-    
+
+    categoryid = cur.lastrowid
+
     sql = """
             INSERT INTO categorytranslation
     		(
     		    categoryid,
     		    name,
-    		    shortdescription, 
-    		    description, 
-    		    languageid, 
-    		    seo, 
-    		    keyword_title, 
-    		    keyword, 
+    		    shortdescription,
+    		    description,
+    		    languageid,
+    		    seo,
+    		    keyword_title,
+    		    keyword,
     		    keyword_description
 		    )
 			VALUES
 			(
 			    %(categoryid)s,
 			    %(name)s,
-			    %(short_description)s, 
-			    %(description)s, 
-			    %(languageid)s, 
-			    %(seo)s, 
-			    %(keyword_title)s, 
-			    %(keyword)s, 
+			    %(short_description)s,
+			    %(description)s,
+			    %(languageid)s,
+			    %(seo)s,
+			    %(keyword_title)s,
+			    %(keyword)s,
 			    %(keyword_description)s
 		    )
         """
@@ -89,10 +89,10 @@ def category_add(db, name, www, short_description = '', description = '',
     data['keyword_title'] = keyword_title
     data['keyword'] = keyword
     data['keyword_description'] = keyword_description
-    
+
     cur = db.cursor()
     cur.execute(sql, data)
     db.commit()
-    
-    return categoryid 
+
+    return categoryid
 

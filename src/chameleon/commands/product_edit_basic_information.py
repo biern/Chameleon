@@ -4,7 +4,8 @@ from chameleon import api
 
 
 @api.register
-def product_edit_basic_information(db, productid, name, url, enable, ean, delivelercode, producerid, languageid=None):
+def product_edit_basic_information(db, productid, name, url, enable, ean,
+                                   delivelercode, producerid, languageid=None):
     """
     Edit product basic information
     :param int productid:
@@ -14,19 +15,19 @@ def product_edit_basic_information(db, productid, name, url, enable, ean, delive
     :param str ean:
     :param str delivelercode:
     :param int producerid:
-    :param int languageid:  
+    :param int languageid:
     """
 
     cur = db.cursor()
     sql = """
         UPDATE
-		    producttranslation
-		SET
-			name = %(name)s, 
-			seo = %(url)s
-		WHERE
-			productid = %(productid)s 
-			AND languageid = %(languageid)s
+            producttranslation
+        SET
+            name = %(name)s,
+            seo = %(url)s
+        WHERE
+            productid=%(productid)s
+            AND languageid=%(languageid)s
         """
     data = {}
     data['name'] = name
@@ -36,18 +37,18 @@ def product_edit_basic_information(db, productid, name, url, enable, ean, delive
 
     cur = db.cursor()
     cur.execute(sql, data)
-    db.commit()  
-    
+    db.commit()
+
     sql = """
         UPDATE
             product
-		SET
-			enable = %(enable)s, 
-			ean = %(ean)s, 
-			delivelercode = %(delivelercode)s, 
-			producerid = %(producerid)s
-		WHERE
-			idproduct = %(idproduct)s
+        SET
+            enable = %(enable)s,
+            ean = %(ean)s,
+            delivelercode = %(delivelercode)s,
+            producerid = %(producerid)s
+        WHERE
+            idproduct = %(idproduct)s
         """
     data = {}
     data['enable'] = enable
@@ -55,7 +56,7 @@ def product_edit_basic_information(db, productid, name, url, enable, ean, delive
     data['delivelercode'] = delivelercode
     data['producerid'] = producerid
     data['idproduct'] = productid
-    
+
     cur = db.cursor()
     cur.execute(sql, data)
-    db.commit() 
+    db.commit()
