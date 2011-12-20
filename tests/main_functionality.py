@@ -10,7 +10,7 @@ import time
 from chameleon.db import Database
 
 if __name__ == "__main__":
-    uniqId = str(time.time())
+    uniqId = str(int(time.time()))
 
     # Utworzenie nowej kategorii
     categoryId = category_add(Database(), "Nowa kategoria "+uniqId, "nowa_kategoria_url", "Krótki opis",
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     product_edit_stock(Database(), productId, 100, 1, 100.45)
 
     # Dodanie zdjęcia do gekosale
-    imageId = image_add(Database(), "/home/marcin/inne/lol/mana_energy_potion_sixpack_package.jpg")
+    imageId = image_add(Database(), sys.argv[1])
 
     # Dodanie zdjęcia do produktu i ustawienie go jako główne
     product_add_image(Database(), productId, imageId)
