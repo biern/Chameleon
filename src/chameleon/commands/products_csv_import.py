@@ -15,7 +15,6 @@ def products_csv_import(db, path):
 
     :param str path: Path to csv file.
     """
-    # TODO: waits for product_add
     if not os.path.exists(path):
         print('File "{}" does not exist'.format(path))
         return
@@ -24,10 +23,9 @@ def products_csv_import(db, path):
     for i, row in enumerate(reader, 1):
         print('#{}: {} ...'.format(i, '; '.join(row)))
         try:
-            # product_add(db, *row)
-            pass
+            product_add(db, *row)
         except Exception, e:
-            print("FAIL: {}".format(e))
+            print("  FAIL: {}".format(e))
             continue
 
-        print("OK")
+        print("  OK")
