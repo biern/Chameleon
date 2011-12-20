@@ -15,4 +15,6 @@ def shell_eval(argv=None):
         [(k, v.get_parser(db)) for k, v in api.items()])
     args = parser.parse_args(argv)
     func = api[args.subparser]
-    func.call_from_namespace(db, args)
+    value = func.call_from_namespace(db, args)
+    if value is not None:
+        print(value)
