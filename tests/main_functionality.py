@@ -29,7 +29,7 @@ if __name__ == "__main__":
     delivererId = deliverer_add(Database(), "Nowy dostawca "+uniqId, "www.strona_dostawcy.pl", "email@dostawcy002.pl")
 
     # Utworzenie nowego producenta
-    producerId = producer_add(Database(), "Nowy producent "+uniqId, "nowy_producent_url", "opis nowego producenta")
+    producerId = producer_add(Database(), "Nowy producent "+uniqId, "nowy_producent_url_"+uniqId, "opis nowego producenta")
 
     # Utworzenie nowego produktu i dodanie go do nowo utworzonej
     # kategori, dostawcy i producenta
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # 100.10 - Cena zakupu
     # 200.30 - Cena sprzedaży
     # 10.50 - Waga
-    productId = product_add(Database(), "Nowy dodany produkt "+uniqId, "url_dodanego_produktu", 1, 5, 100.10, 200.30, 10.50)
+    productId = product_add(Database(), "Nowy dodany produkt "+uniqId, "url_dodanego_produktu_"+uniqId, 1, 5, 100.10, 200.30, 10.50)
 
     # Ustawiamy kategorię dla tego produktu
     product_add_to_category(Database(), productId, categoryId)
