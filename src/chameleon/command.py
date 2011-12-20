@@ -91,7 +91,7 @@ class DBCommandWrapper(object):
         Transletes namespace to :meth:`perform` arguments and calls it.
         """
         args, kwargs = self.args_from_namespace(namespace)
-        self(db, *args, **kwargs)
+        return self(db, *args, **kwargs)
 
     @classmethod
     def for_func(cls, func):
