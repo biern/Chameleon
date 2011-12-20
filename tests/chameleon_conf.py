@@ -16,5 +16,8 @@ try:
     from local_conf import DATABASE as LOCAL
     DATABASE.update(LOCAL)
 
+    from local_conf import DEFAULT_ARGS as LOCAL_DEF_ARGS
+    DEFAULT_ARGS.update(LOCAL_DEF_ARGS)
+
 except ImportError:
     raise Exception("local conf not found!!!1!11111")
