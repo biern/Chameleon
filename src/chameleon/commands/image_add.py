@@ -100,9 +100,14 @@ def image_add(db, filename, userid=None, root_path=None, shopid=None):
 
     filename = "{0}{1}".format(imageid, ext)
     for dim in sizes:
-        path = os.path.join(gallery_dir, "_{1}_{1}".format(dim, dim), filename)
+        path = os.path.join(gallery_dir, "_{}_{}".format(dim, dim), filename)
         thumb = img.copy()
         thumb.thumbnail([dim] * 2, Image.ANTIALIAS)
         thumb.save(path)
+        path = os.path.join(gallery_dir, "_{}_{}_{}".format(dim, dim, shopid),
+                            filename)
+        thumb.save(path)
+
+    img.save(os.path.join(gallery_dir, "original", filename))
 
     return imageid
