@@ -20,16 +20,25 @@ class DBCommandWrapper(object):
         Calls :attr:`perform` as an unbound function.
         """
         with db.conn:
-            self.perform.im_func(db, *args, **self.add_defaults(db, kwargs))
+            self.perform.im_func(db, *args,
+                                 **self.add_defaults(db, kwargs, args))
 
-    def add_defaults(self, db, kwargs):
+    def add_defaults(self, db, kwargs, args=[]):
         """
         Adds values from 'DEFAULT_ARGS' config to keyword args if they where
         not supplied explicitly
         """
         res = kwargs.copy()
+        # Skip keywords arguments already supplied by args
+        skip = len(args) - (len(self.args) - 1)
+        if skip < 0:
+            skip = 0
+
+        kwargs_names = self.keyword_args[skip:]
+
         for k, v in self.get_config_default_args(db).items():
-            res.setdefault(k, v)
+            if k in kwargs_names:
+                res.setdefault(k, v)
 
         return res
 
