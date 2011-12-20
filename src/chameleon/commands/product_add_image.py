@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from chameleon import api
+import os
 
 
 @api.register
-def product_add_image(db, productid, imageid, ismain=0, userid=None):
+def product_add_image(db, productid, imageid, ismain=0, userid=None,
+                      root_path=None):
     """
     Add product to image
     :param int productid:
@@ -68,3 +70,7 @@ def product_add_image(db, productid, imageid, ismain=0, userid=None):
     cur = db.cursor()
     cur.execute(sql, data)
     db.commit()
+
+    for filename in os.listdir(os.path.join(root_path, 'serialization')):
+        if filename.startswith("Cache.Files"):
+            os.remove(os.path.join(root_path, "serialization", filename))
