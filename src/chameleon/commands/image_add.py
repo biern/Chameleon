@@ -3,6 +3,7 @@
 from chameleon import api
 import os
 import mimetypes
+import shutil
 
 
 @api.register
@@ -100,13 +101,23 @@ def image_add(db, filename, userid=None, root_path=None, shopid=None):
 
     filename = "{0}{1}".format(imageid, ext)
     for dim in sizes:
-        path = os.path.join(gallery_dir, "_{}_{}".format(dim, dim), filename)
+        path = os.path.join(gallery_dir, "_{}_{}".format(dim, dim))
+        try:
+            os.mkdir(path)
+        except OSError:
+            pass
+
         thumb = img.copy()
         thumb.thumbnail([dim] * 2, Image.ANTIALIAS)
-        thumb.save(path)
-        path = os.path.join(gallery_dir, "_{}_{}_{}".format(dim, dim, shopid),
-                            filename)
-        thumb.save(path)
+        thumb.save(os.path.join(path, filename))
+
+        path = os.path.join(gallery_dir, "_{}_{}_{}".format(dim, dim, shopid))
+        try:
+            os.mkdir(path)
+        except OSError:
+            pass
+
+        thumb.save(os.path.join(path, filename))
 
     img.save(os.path.join(gallery_dir, "original", filename))
 
