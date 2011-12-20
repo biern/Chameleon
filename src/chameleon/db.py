@@ -48,7 +48,9 @@ class Database(object):
     def connect(self):
         cfg = self.DEFAULTS.copy()
         cfg.update(self.config['DATABASE'])
+
         self.conn = mdb.connect(**cfg)
+        self.cursor().execute("SET names utf8")
         return self.conn
 
     def validate(self, name, value, *options):
