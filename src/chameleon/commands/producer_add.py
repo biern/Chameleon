@@ -7,20 +7,21 @@ from chameleon import api
 def producer_add(db, name, www, description,
                  producerid=0, photoid=1,
                  keyword_title='', keyword='', keyword_description='',
-                 languageid=None, userid=None):
+                 languageid=None, userid=None, shopid=None):
     """
     Add producer or translation
 
     :param int producerid: If greater than 0, add only translation
-    :param str name: Name (required, language_unique)
-    :param str www: WWW address
-    :param str email: Email (required, email)
-    :param str keyword_title: Keyword title
-    :param str keyword: Keywords
-    :param str keyword_description: Keywords description
-    :param int photoid:
-    :param int languageid:
-    :param int userid:
+    :param str name: Nazwa
+    :param str www: Adres URL
+    :param str description: Opis 
+    :param str keyword_title: Meta tytuł
+    :param str keyword: Słowa kluczowe
+    :param str keyword_description: Meta opis
+    :param int photoid: Id zdjęcia
+    :param int languageid: Id języka
+    :param int userid: Id użytkownika
+    :param int shopid: Id sklepu
     :return: Added / updated producer id
     """
     db.validate('name', name,
@@ -74,6 +75,29 @@ def producer_add(db, name, www, description,
     data['keyword'] = keyword
     data['keyword_description'] = keyword_description
     data['languageid'] = languageid
+
+    cur = db.cursor()
+    cur.execute(sql, data)
+    db.commit()
+    
+    sql = """INSERT INTO producerview (
+               idproducerview,
+               producerid,
+               viewid,
+               addid
+          )
+          VALUES
+          (    
+               NULL,
+               %(producerid)s,
+               %(shopid)s,
+               %(userid)s
+          )"""
+
+    data = {}
+    data['producerid'] = producerid
+    data['shopid'] = shopid
+    data['userid'] = userid
 
     cur = db.cursor()
     cur.execute(sql, data)

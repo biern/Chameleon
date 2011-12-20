@@ -8,15 +8,15 @@ def product_add(db, name, url, stock, vatid, buyprice, sellprice, weight,
                 languageid=None, userid=None):
     """
     Add product
-    :param str name:
-    :param str url:
-    :param int stock:
-    :param int vatiId:
-    :param float buyprice:
-    :param float sellprice:
-    :param float weight:
-    :param int languageid:
-    :param int userid:
+    :param str name: Nazwa produktu
+    :param str url: URL produktu
+    :param int stock: Stan magazynowy
+    :param int vatiId: Identyfikator podatku VAT
+    :param float buyprice: Cena netto zakupu
+    :param float sellprice: Cena netto sprzedaży
+    :param float weight: Waga produktu
+    :param int languageid: Id języka
+    :param int userid: Id użytkownika
     :return: Product id
     """
 

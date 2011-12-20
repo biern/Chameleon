@@ -4,17 +4,16 @@ from chameleon import api
 
 
 @api.register
-def product_edit_basic_information(db, productid, name, url, enable, ean,
-                                   delivelercode, producerid, languageid=None):
+def product_edit_basic_information(db, productid, enable, ean,
+                                   delivelercode, producerid, delivererid, languageid=None, userid=None):
     """
     Edit product basic information
-    :param int productid:
-    :param str name:
-    :param str url:
-    :param int enable:
-    :param str ean:
-    :param str delivelercode:
-    :param int producerid:
+    :param int productid: Id produktu
+    :param int enable: Wyświetl produkt w sklepie
+    :param str ean: Kod EAN
+    :param str delivelercode: Kod dostawcy
+    :param int producerid: ID producenta
+    :param int delivererid: Id dostawcy
     :param int languageid:
     """
 
@@ -56,6 +55,30 @@ def product_edit_basic_information(db, productid, name, url, enable, ean,
     data['delivelercode'] = delivelercode
     data['producerid'] = producerid
     data['idproduct'] = productid
+
+    cur = db.cursor()
+    cur.execute(sql, data)
+    db.commit()
+    
+    sql = """
+        INSERT INTO productdeliverer (                   
+            idproductdeliverer,
+            productid,
+            delivererid,
+            addid
+        )
+        VALUES
+        (   
+            NULL,
+            %(productid)s,
+            %(delivererid)s,
+            %(userid)s
+        )
+        """
+    data = {}
+    data['productid'] = productid
+    data['delivererid'] = delivererid
+    data['userid'] = userid
 
     cur = db.cursor()
     cur.execute(sql, data)
