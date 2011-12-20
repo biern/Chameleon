@@ -9,7 +9,7 @@ def product_add_image(db, productid, imageid, ismain=0, userid=None):
     Add product to image
     :param int productid:
     :param int imageid:
-    :param int ismain: 
+    :param int ismain:
     """
 
     cur = db.cursor()
@@ -25,8 +25,8 @@ def product_add_image(db, productid, imageid, ismain=0, userid=None):
 
     cur = db.cursor()
     cur.execute(sql, data)
-    db.commit()  
-    
+    db.commit()
+
     if ismain == 1:
         sql = """
             UPDATE productphoto
@@ -41,7 +41,7 @@ def product_add_image(db, productid, imageid, ismain=0, userid=None):
         cur = db.cursor()
         cur.execute(sql, data)
         db.commit()
-    
+
     sql = """
         INSERT INTO productphoto (
             idproductphoto,
@@ -64,7 +64,7 @@ def product_add_image(db, productid, imageid, ismain=0, userid=None):
     data['imageid'] = imageid
     data['userid'] = userid
     data['ismain'] = ismain
-    
+
     cur = db.cursor()
     cur.execute(sql, data)
     db.commit()
