@@ -11,12 +11,12 @@ def product_add_variant(db, productid, type, value, stock, attribute_group_id, s
 	:param int productid:
 	:param int type: 1 - %, 2 +, 3 -, 4 = 
 	:param float value: Wartość modyfikatora   
-	:param int stock:                    
-	:param int attribute_group_id:
-	:param str symbol:
-	:param float weight:
-	:param int status:
-	:param int userid:  
+	:param int stock: Stan magazynowy                    
+	:param int attribute_group_id: Id grupy cech
+	:param str symbol: Symbol
+	:param int status: Status (aktywny, nieaktywny)
+	:param float weight: Waga  
+	:param int userid: Identyfikator użytkownika  
 	:return: Product variant id
     """
     

@@ -8,10 +8,10 @@ def product_edit_stock(db, productid, stock, track_stock, shipping_cost):
     """
     Edit stock info    
 
-    :param int productid:
-	:param int stock:
-	:param boolean track_stock:
-	:param float shipping_cost:
+    :param int productid: Id produktu
+	:param int stock: Stan magazynowy
+	:param boolean track_stock: Śledzenie stanu magazynowego
+	:param float shipping_cost: Koszt dostawy
     """
     
     cur = db.cursor()

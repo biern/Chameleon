@@ -18,25 +18,6 @@ def product_edit_basic_information(db, productid, enable, ean,
     """
 
     cur = db.cursor()
-    sql = """
-        UPDATE
-            producttranslation
-        SET
-            name = %(name)s,
-            seo = %(url)s
-        WHERE
-            productid=%(productid)s
-            AND languageid=%(languageid)s
-        """
-    data = {}
-    data['name'] = name
-    data['url'] = url
-    data['productid'] = productid
-    data['languageid'] = languageid
-
-    cur = db.cursor()
-    cur.execute(sql, data)
-    db.commit()
 
     sql = """
         UPDATE

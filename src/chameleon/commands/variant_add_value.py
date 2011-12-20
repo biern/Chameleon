@@ -25,8 +25,8 @@ def variant_add_value(db, variantid, attributevalueid, userid=None):
         VALUES
         (  
             NULL,
-            %(variantid)s,
             %(attributevalueid)s,
+            %(variantid)s,
             %(userid)s          
         )
         """

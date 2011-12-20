@@ -9,9 +9,9 @@ def product_edit_meta(db, productid, keyword_title, keyword, keyword_description
     Edit product meta information
 
 	:param int productId:
-    :param str keyword_title: Keyword title
-    :param str keyword: Keywords 
-    :param str keyword_description: Keywords description
+    :param str keyword_title: Meta tytuł
+    :param str keyword: Słowa kluczowe 
+    :param str keyword_description: Meta opis
     """
     
     cur = db.cursor()
