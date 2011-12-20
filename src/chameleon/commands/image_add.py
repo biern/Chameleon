@@ -4,10 +4,9 @@ from chameleon import api
 import os
 import mimetypes
 
-# TODO: image_add
 
 @api.register
-def image_add(db, filename, userid=None, root_path=None):
+def image_add(db, filename, userid=None, root_path=None, shopid=None):
     """
     Add image to gekosale
     :param str filename:
@@ -20,6 +19,7 @@ def image_add(db, filename, userid=None, root_path=None):
     import Image
 
     db.validate('root_path', root_path, 'required')
+    db.validate('shopid', shopid, 'required')
 
     gallery_dir = os.path.join(root_path, "design/_gallery")
 
@@ -31,7 +31,7 @@ def image_add(db, filename, userid=None, root_path=None):
 
     # extension id
 
-    extid = cur.execute(
+    cur.execute(
         """
         SELECT
             idfileextension
@@ -40,6 +40,7 @@ def image_add(db, filename, userid=None, root_path=None):
         WHERE
             name = %s
         """, (ext[1:]))
+    extid = cur.fetchone()[0]
 
     if extid is None:
         raise IOError('Unsupported extension "{}"'.format(ext))
@@ -51,7 +52,7 @@ def image_add(db, filename, userid=None, root_path=None):
     except KeyError:
         raise Exception('unknown mimetype for extension "{}"'.format(ext))
 
-    mimeid = cur.execute(
+    cur.execute(
         """
         SELECT
             idfiletype
@@ -60,6 +61,8 @@ def image_add(db, filename, userid=None, root_path=None):
         WHERE
             name = %s
         """, (mimetype,))
+
+    mimeid = cur.fetchone()[0]
 
     sql = """
         INSERT INTO file (
