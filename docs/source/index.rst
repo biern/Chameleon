@@ -11,6 +11,7 @@ Zawartość:
 .. toctree::
    :maxdepth: 2
 
+   install
    commands
 
 

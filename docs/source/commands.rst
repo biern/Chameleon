@@ -1,7 +1,7 @@
 .. _`commands`:
 
-Commands
-========
+Pełna referencja API
+====================
 
 Dostępne wywołania API
 
