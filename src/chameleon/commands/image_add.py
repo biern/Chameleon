@@ -10,6 +10,7 @@ import shutil
 def image_add(db, filename, userid=None, root_path=None, shopid=None):
     """
     Add image to gekosale
+
     :param str filename:
     :param int languageid:
     :param int userid:
