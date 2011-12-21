@@ -58,6 +58,8 @@ Przykładowy plik konfiguracyjny:
 
 .. code-block:: python
 
+   # -*- coding: utf-8 -*-
+
    DATABASE = {
      'db': 'gekosale',
      'user': 'uzytkownik_bazy_danych',
@@ -72,4 +74,10 @@ Przykładowy plik konfiguracyjny:
      'userid': 1, # oznacza użytkownika, w którego imię skrypt przeprowadza akcje
      'languageid': 1, # id języka dla którego wprowadzamy tłumaczenia
      'shopid' : 3, # id sklepu w którym wprowadzamy zmiany
+
+     # katalog w ktorym znajduje się 'index.php'
+     # wykorzystywany tylko przez niektóre polecenia
+     'root_path': '/absolutna/sciezka/do/miejsca/instalacji/gekosale',
    }
+
+Jeśli korzystamy ze skryptu tests/chameleon , należy zastąpić plik tests/chameleon_conf.py własnymi ustawieniami.

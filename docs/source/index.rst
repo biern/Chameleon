@@ -12,7 +12,9 @@ Zawartość:
    :maxdepth: 2
 
    install
+   example
    commands
+   howitsmade
 
 
 Indices and tables
