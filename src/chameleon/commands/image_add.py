@@ -3,7 +3,6 @@
 from chameleon import api
 import os
 import mimetypes
-import shutil
 
 
 @api.register
