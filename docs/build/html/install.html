@@ -1,0 +1,187 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Instalacja &mdash; Chameleon v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Chameleon v0.2 documentation" href="index.html" />
+    <link rel="next" title="Przykład użycia" href="example.html" />
+    <link rel="prev" title="Dokumentacja projektu Chameleon" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example.html" title="Przykład użycia"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Dokumentacja projektu Chameleon"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Chameleon v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="instalacja">
+<span id="install"></span><h1>Instalacja<a class="headerlink" href="#instalacja" title="Permalink to this headline">¶</a></h1>
+<p>Projekt wymaga:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.python.org/getit/releases/2.7/">Python2.7</a> (wcześniejsze wersje nie zadziałają)</li>
+<li><a class="reference external" href="http://sourceforge.net/projects/mysql-python/">python-mysqldb</a></li>
+<li><a class="reference external" href="http://www.pythonware.com/products/pil/">PIL</a></li>
+</ul>
+<div class="section" id="instalacja-zaleznosci">
+<h2>Instalacja zależności<a class="headerlink" href="#instalacja-zaleznosci" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Python2.7</dt>
+<dd>Wersja 2.7 jest domyślna w większości zaktualizowanych systemów GNU/Linux. Aktualną wersję można sprawdzić poprzez <tt class="docutils literal"><span class="pre">python</span> <span class="pre">--version</span></tt>. Jeśli doinstalowanie wersji 2.7 było konieczne, może zaistnieć konieczność wywoływania polecenia w wersji 2.7 explicite, stosując wszędzie <tt class="docutils literal"><span class="pre">python2.7</span></tt> zamiast <tt class="docutils literal"><span class="pre">python</span></tt>.</dd>
+<dt>python-mysqldb, PIL:</dt>
+<dd>Jeśli korzystamy z systemu GNU/Linux, jest duża szansa, że zależności te można pobrać instalując paczki <tt class="docutils literal"><span class="pre">python-mysqldb</span></tt> i <tt class="docutils literal"><span class="pre">python-imaging</span></tt>. Jeśli nie, należy postępować zgodnie z instrukcjami na stronach bibliotek.</dd>
+</dl>
+</div>
+<div class="section" id="instalacja-programu">
+<h2>Instalacja programu<a class="headerlink" href="#instalacja-programu" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre>svn co http://xp-dev.com/svn/Sim2011_D.5-6 Chameleon
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>opcjonalne:</dt>
+<dd>instalacja jako globalnie dostępnego modułu pythona
+i utworzenie dowiązania w przestrzeni nazw użytkownika</dd>
+</dl>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd </span>Chameleon
+sudo python setup.py install
+</pre></div>
+</div>
+<p>Jeśli wykonaliśmy ostatni krok, w systemie powinno być dostępne polecenie <tt class="docutils literal"><span class="pre">chameleon</span></tt></p>
+<p>Jeśli nie chcemy instalować paczki globalnie, można korzystać zamiennie ze skryptu <tt class="docutils literal"><span class="pre">tests/chameleon</span></tt></p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">cd </span>Chameleon/tests
+./chameleon
+</pre></div>
+</div>
+</div>
+<div class="section" id="konfiguracja">
+<h2>Konfiguracja<a class="headerlink" href="#konfiguracja" title="Permalink to this headline">¶</a></h2>
+<p>Projekt do działania wymaga utworzenia pliku konfiguracyjnego gdzieś w drzewie katalogów, w którym został uruchomiony. Skrypt przeszukuje katalogi w górę, poczynając od aktualnego, w poszukiwaniu pliku <tt class="docutils literal"><span class="pre">chameleon_conf.py</span></tt>.</p>
+<p>Przykładowy plik konfiguracyjny:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="c"># Konfiguracja bazy danych</span>
+<span class="n">DATABASE</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">&#39;db&#39;</span><span class="p">:</span> <span class="s">&#39;gekosale&#39;</span><span class="p">,</span>
+  <span class="s">&#39;user&#39;</span><span class="p">:</span> <span class="s">&#39;uzytkownik_bazy_danych&#39;</span><span class="p">,</span>
+  <span class="s">&#39;passwd&#39;</span><span class="p">:</span> <span class="s">&#39;haslo_bazy_danych&#39;</span><span class="p">,</span>
+  <span class="s">&#39;host&#39;</span><span class="p">:</span> <span class="s">&#39;ip/host_bazy_danych&#39;</span><span class="p">,</span>
+  <span class="s">&#39;port&#39;</span><span class="p">:</span> <span class="mi">3306</span><span class="p">,</span>
+  <span class="s">&#39;connect_timeout&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c"># Zestaw domyślnych argumentów dla wszystkich poleceń. Można go rozszerzyć</span>
+<span class="c"># o własne, lub w ogóle pominąć jednak oszczędza on przesyłania za każdym</span>
+<span class="c"># razem tych samych wartości do wszystkich wywołań.</span>
+<span class="n">DEFAULT_ARGS</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">&#39;userid&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c"># oznacza użytkownika, w którego imię skrypt przeprowadza akcje</span>
+  <span class="s">&#39;languageid&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c"># id języka dla którego wprowadzamy tłumaczenia</span>
+  <span class="s">&#39;shopid&#39;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="c"># id sklepu w którym wprowadzamy zmiany</span>
+
+  <span class="c"># katalog w ktorym znajduje się &#39;index.php&#39;</span>
+  <span class="c"># wykorzystywany tylko przez niektóre polecenia</span>
+  <span class="s">&#39;root_path&#39;</span><span class="p">:</span> <span class="s">&#39;/absolutna/sciezka/do/miejsca/instalacji/gekosale&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Jeśli korzystamy ze skryptu tests/chameleon , należy zastąpić istniejący plik tests/chameleon_conf.py własnymi ustawieniami.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Instalacja</a><ul>
+<li><a class="reference internal" href="#instalacja-zaleznosci">Instalacja zależności</a></li>
+<li><a class="reference internal" href="#instalacja-programu">Instalacja programu</a></li>
+<li><a class="reference internal" href="#konfiguracja">Konfiguracja</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Dokumentacja projektu Chameleon</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example.html"
+                        title="next chapter">Przykład użycia</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/install.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example.html" title="Przykład użycia"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Dokumentacja projektu Chameleon"
+             >previous</a> |</li>
+        <li><a href="index.html">Chameleon v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Marcin Biernat, Jakub Osika, Kacper Szurek.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
