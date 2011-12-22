@@ -14,8 +14,10 @@ VERSION = open(os.path.join(here, 'VERSION')).read()
 README = ""
 NEWS = ""
 
-install_requires = [
 
+install_requires = [
+    'PIL',
+#    'MySQLdb', # nie da się spełnić :-(
 ]
 
 setup(name=NAME,
