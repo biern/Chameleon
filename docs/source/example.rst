@@ -47,4 +47,6 @@ Przegląd funkcjonalności
 
 Wszystkie wywołania są dostępne w identycznej formie z poziomu pythona lub shella. Ninjeszy przykład demonstruje sposób użycia większości z nich:
 
+(skrypt ten można znaleźć w ``Chameleon/tests/main_functionality.py``)
+
 .. literalinclude:: ../../tests/main_functionality.py
