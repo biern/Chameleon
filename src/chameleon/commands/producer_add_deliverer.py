@@ -6,6 +6,11 @@ from chameleon import api
 @api.register
 def producer_add_deliverer(db, delivererid, producerid,
                            userid=None):
+    """
+    TODO
+
+    :param: TODO
+    """
     sql = """INSERT INTO producerdeliverer (delivererid, producerid, addid)
 VALUES (%(delivererid)s, %(producerid)s, %(addid)s)"""
 

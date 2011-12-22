@@ -6,26 +6,26 @@ from chameleon import api
 @api.register
 def product_add_to_category(db, productid, categoryid, userid=None):
     """
-    Add product to category    
+    Add product to category
 
-	:param int productid:
-	:param int categoryid:
-    :param int userid: 
-	:return: Product category id
+    :param int productid:
+    :param int categoryid:
+    :param int userid:
+    :return: Product category id
     """
-    
+
     cur = db.cursor()
     sql = """
         INSERT INTO productcategory
         (
-            productid, 
-            categoryid, 
+            productid,
+            categoryid,
             addid
         )
         VALUES
         (
-            %(productid)s, 
-            %(categoryid)s, 
+            %(productid)s,
+            %(categoryid)s,
             %(addid)s
         )
         """

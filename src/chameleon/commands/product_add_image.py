@@ -9,6 +9,7 @@ def product_add_image(db, productid, imageid, ismain=0, userid=None,
                       root_path=None):
     """
     Add product to image
+
     :param int productid:
     :param int imageid:
     :param int ismain:

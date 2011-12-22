@@ -7,6 +7,7 @@ from chameleon import api
 def attribute_add_group(db, name, userid=None):
     """
     Create new attribute group
+
     :param str name:
     :param int userid:
     :return: Attribute group id

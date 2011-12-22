@@ -109,10 +109,10 @@ products_csv_import
 
 .. automethod:: chameleon.commands.products_csv_import.perform
 
-products_dir_update
-^^^^^^^^^^^^^^^^^^^
+.. products_dir_update
+.. ^^^^^^^^^^^^^^^^^^^
 
-.. automethod:: chameleon.commands.products_dir_update.perform
+.. .. automethod:: chameleon.commands.products_dir_update.perform
 
 product_update
 ^^^^^^^^^^^^^^
@@ -123,5 +123,3 @@ variant_add_value
 ^^^^^^^^^^^^^^^^^
 
 .. automethod:: chameleon.commands.variant_add_value.perform
-
-

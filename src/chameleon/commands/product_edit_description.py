@@ -8,6 +8,7 @@ def product_edit_description(db, productid, shortdescription, description, longd
                             languageid=None, userid=None):
     """
     Edit product description
+
     :param int productid: Id produktu
     :param str shortdescription: Krótki opis
     :param str description: Długi opis
@@ -29,13 +30,13 @@ def product_edit_description(db, productid, shortdescription, description, longd
             productid = %(productid)s
             AND languageid = %(languageid)s
         """
-        
+
     data = {}
     data['shortdescription'] = shortdescription
     data['description'] = description
     data['longdescription'] = longdescription
     data['productid'] = productid
-    data['languageid'] = languageid    
+    data['languageid'] = languageid
 
     cur = db.cursor()
     cur.execute(sql, data)

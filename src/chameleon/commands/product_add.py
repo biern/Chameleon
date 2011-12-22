@@ -8,6 +8,7 @@ def product_add(db, name, url, stock, vatid, buyprice, sellprice, weight,
                 languageid=None, userid=None):
     """
     Add product
+
     :param str name: Nazwa produktu
     :param str url: URL produktu
     :param int stock: Stan magazynowy

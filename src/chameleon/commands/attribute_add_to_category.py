@@ -8,6 +8,7 @@ def attribute_add_to_category(db, groupid, propertyid, categoryid,
                               userid=None):
     """
     Add attribute group and attribute property to category
+
     :param int groupid:
     :param int propertyid:
     :param int categoryid:
