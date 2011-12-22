@@ -5,14 +5,14 @@ Instalacja
 
 Projekt wymaga:
 
-- `Python2.7+`_ (wcześniejsze wersje nie zadziałają)
+- `Python2.7`_ (wcześniejsze wersje nie zadziałają)
 - python-mysqldb_
 - PIL_
 
 Instalacja zależności
 ---------------------
 
-Python2.7+
+Python2.7
         Wersja 2.7 jest domyślna w większości zaktualizowanych systemów GNU/Linux. Aktualną wersję można sprawdzić poprzez ``python --version``. Jeśli doinstalowanie wersji 2.7 było konieczne, może zaistnieć konieczność wywoływania polecenia w wersji 2.7 explicite, stosując wszędzie ``python2.7`` zamiast ``python``.
 
 python-mysqldb, PIL:
@@ -21,7 +21,7 @@ python-mysqldb, PIL:
 
 .. _PIL: http://www.pythonware.com/products/pil/
 .. _python-mysqldb: http://sourceforge.net/projects/mysql-python/
-.. _python2.7+: http://www.python.org/getit/releases/2.7/
+.. _python2.7: http://www.python.org/getit/releases/2.7/
 
 
 Instalacja programu
@@ -60,6 +60,7 @@ Przykładowy plik konfiguracyjny:
 
    # -*- coding: utf-8 -*-
 
+   # Konfiguracja bazy danych
    DATABASE = {
      'db': 'gekosale',
      'user': 'uzytkownik_bazy_danych',
@@ -69,7 +70,9 @@ Przykładowy plik konfiguracyjny:
      'connect_timeout': 3,
    }
 
-   # Zestaw domyślnych argumentów dla wszystkich poleceń (można rozszerzyć o własne)
+   # Zestaw domyślnych argumentów dla wszystkich poleceń. Można go rozszerzyć
+   # o własne, lub w ogóle pominąć jednak oszczędza on przesyłania za każdym
+   # razem tych samych wartości do wszystkich wywołań.
    DEFAULT_ARGS = {
      'userid': 1, # oznacza użytkownika, w którego imię skrypt przeprowadza akcje
      'languageid': 1, # id języka dla którego wprowadzamy tłumaczenia
@@ -80,4 +83,4 @@ Przykładowy plik konfiguracyjny:
      'root_path': '/absolutna/sciezka/do/miejsca/instalacji/gekosale',
    }
 
-Jeśli korzystamy ze skryptu tests/chameleon , należy zastąpić plik tests/chameleon_conf.py własnymi ustawieniami.
+Jeśli korzystamy ze skryptu tests/chameleon , należy zastąpić istniejący plik tests/chameleon_conf.py własnymi ustawieniami.

@@ -40,3 +40,11 @@ Argumenty pozycyjne (name, url, ...) są obowiązkowe, pozostałe można dodać 
    $ chameleon product_add "jakiś produkt" url 10 3 80 100 10 --userid 1
 
 Warto zauważyć, że domyślne wartości dla tych argumentów są pobierane z pliku konfiguracyjnego (sekcja ``DEFAULT_ARGS``), jeśli chcemy, możemy je przeładować podając je explicite, jak powyżej.
+
+
+Przegląd funkcjonalności
+------------------------
+
+Wszystkie wywołania są dostępne w identycznej formie z poziomu pythona lub shella. Ninjeszy przykład demonstruje sposób użycia większości z nich:
+
+.. literalinclude:: ../../tests/main_functionality.py
