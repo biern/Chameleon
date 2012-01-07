@@ -14,9 +14,9 @@ def order_create(db, dispatchid, paymentid, customeropinion, userid=None, shopid
     :param int dispatchid: Identyfikator sposobu wysyłki
     :param int paymentid: Identyfikator płatności
     :param str customeropinion: Opinia klienta
-    :param int userid:
-    :param int shopid:
-    :param str encryption_key:
+    :param int userid: Id użytkownika
+    :param int shopid: Id sklepu
+    :param str encryption_key: Hasz szyfrowania bazy
     """
 
     cur = db.cursor()
@@ -57,23 +57,7 @@ def order_create(db, dispatchid, paymentid, customeropinion, userid=None, shopid
 
     price = 0 # Tymczasowa zmienna ceny
 
-    # Metoda poszukiwania ceny wysyłki względem ceny zakupu
-    cur.execute(
-        """
-        SELECT
-            dispatchmethodcost
-        FROM
-            dispatchmethodprice
-        WHERE
-            dispatchmethodid = %s
-            AND `from` >= %s
-            AND `to` <= %s
-        """, (dispatchid, price, price))
-
-    dispatchCost = cur.fetchone()[0]
-
-    if dispatchCost is None:
-        raise IOError('Dispatch method cost not exist for this price')
+    dispatchCost = 0 # Tymczasowy koszt wysyłki
 
     # Standardowo, szukamy waluty PLN
     currencyName = "PLN"
@@ -102,7 +86,19 @@ def order_create(db, dispatchid, paymentid, customeropinion, userid=None, shopid
 
     globalPrice = price+dispatchCost
     
-    orderStatus = 6 # status zamówienia 
+    # Pobieramy status defaultowy
+    cur.execute(
+    """
+        SELECT
+            idorderstatus
+        FROM
+            orderstatus
+        WHERE
+            `default` = %s
+        LIMIT 1
+    """, (1))
+
+    orderStatus = cur.fetchone()[0] # Status zamówienia
     
     data = {}
     data['dispatchCost'] = dispatchCost
@@ -165,5 +161,5 @@ def order_create(db, dispatchid, paymentid, customeropinion, userid=None, shopid
     cur.execute(sql, data)
     db.commit()
 
-    orderid = cur.lastrowid
-    return orderStatus
+    orderId = cur.lastrowid
+    return orderId

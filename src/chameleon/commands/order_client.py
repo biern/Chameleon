@@ -7,19 +7,19 @@ def order_client(db, orderid, firstname, surname, companyname, nip, street, stre
     """
     Tworzenie nowych danych płatnika 
 
-    :param int orderid:
-    :param str firstname:
-    :param str surname:
-    :param str companyname:
-    :param str nip:
-    :param str street:
-    :param str streetno:
-    :param str placeno:
-    :param str postcode:
-    :param str place:
-    :param str phone:
-    :param str email:
-    :param str encryption_key:
+    :param int orderid: Id zamówienia
+    :param str firstname: Imię
+    :param str surname: Nazwisko
+    :param str companyname: Nazwa firmy
+    :param str nip: Numer NIP
+    :param str street: Ulica
+    :param str streetno: Nr budynku
+    :param str placeno: Nr lokalu
+    :param str postcode: Kod pocztowy
+    :param str place: Miejscowość
+    :param str phone: Telefon
+    :param str email: Email
+    :param str encryption_key: Hash szyfrowania bazy
     """
 
     cur = db.cursor()

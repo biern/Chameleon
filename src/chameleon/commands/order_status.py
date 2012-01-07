@@ -7,8 +7,8 @@ def order_status(db, orderid, statusid):
     """
     Zmiana statusu zamówienia
 
-    :param int orderid:
-    :param int statusid:
+    :param int orderid: Id zamówienia
+    :param int statusid: Id statusu
     """
 
     cur = db.cursor()

@@ -3,3 +3,5 @@ dist/
 docs/build
 src/*.egg-info
 *.pyc
+*.swp
+*.py~
