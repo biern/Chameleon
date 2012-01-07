@@ -47,11 +47,52 @@ def order_product(db, orderid, productid, qty, productattributeid=None, language
     if product is None:
         raise IOError('This product not exist')
 
+    priceSql = product[0]
+
+    # Jeżeli użytkownik podał wariant, zmieniamy cene netto
+    if productattributeid is not None:
+        cur.execute(
+        """
+            SELECT
+                attributeprice
+            FROM
+                productattributeset
+            WHERE
+                idproductattributeset = %s
+        """, (productattributeid))
+    
+        priceSql = cur.fetchone()[0]
+
+        # Musimy też stworzyć dodatkowe info na temat wariantu
+        
+        # Pobieramy nazwę atrubutu
+        cur.execute(
+            """
+                SELECT
+                    d.name,
+                    e.name as b
+                FROM
+                    productattributevalueset as c
+                INNER JOIN
+                    attributeproductvalue as d
+                ON
+                    c.attributeproductvalueid = d.idattributeproductvalue
+                INNER JOIN
+                    attributeproduct as e
+                ON
+                    d.attributeproductid = e.idattributeproduct
+                WHERE
+                    c.productattributesetid = %s
+
+            """, (productattributeid))
+
+        atributeArray = cur.fetchone()[0] 
+
     name = product[2]
-    price = product[0]*((product[1]+100)/100) # kwota brutto jednego produktu
+    price = priceSql*((product[1]+100)/100) # kwota brutto jednego produktu
     qtyprice = qty*price #qty * kwota brutto
-    vat = (product[1]/100)*product[0] # kwota vat z jednego produktu
-    pricenetto = product[0] # kwota netto jednego produktu 
+    vat = (product[1]/100)*priceSql # kwota vat z jednego produktu
+    pricenetto = priceSql # kwota netto jednego produktu 
 
     data = {}
     data['orderid'] = orderid
@@ -82,7 +123,36 @@ def order_product(db, orderid, productid, qty, productattributeid=None, language
     db.commit()
 
     orderproductid = cur.lastrowid
-   
+
+    if productattributeid is not None:
+        data = {}
+        data['attributeName'] = atributeArray[0]
+        data['attributeGroup'] = atributeArray[1]
+        data['orderproductid'] = orderproductid
+
+        # Dodajemy nazwę i typ atrybutu do tabeli łączącej
+        sql = """
+            INSERT INTO orderproductattribute
+            (
+                idorderproductattribute,
+                `name`,
+                `group`,
+                orderproductid
+            )
+            VALUES
+            (
+                NULL,
+                %(attributeName)s,
+                %(attributeGroup)s,
+                %(orderproductid)s
+            )
+            """
+
+        cur = db.cursor()
+        cur.execute(sql, data)
+        db.commit()
+
+
     # Musimy pobrać id wysyłki bieżącego zamówienia
     cur = db.cursor()
     cur.execute(
