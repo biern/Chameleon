@@ -27,4 +27,7 @@ if __name__ == "__main__":
     order_product(db, orderId, 22, 3)
 
     # Zmienienie statusu zamówienia
-    order_status(db, orderId, 9)
+    order_status(db, orderId, 9, "Zmiana statusu")
+
+    # Dodanie administratorskiej notatki na temat zamówienia
+    order_note(db, orderId, "Treść notatki admina")

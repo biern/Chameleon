@@ -3,12 +3,14 @@
 from chameleon import api
 
 @api.register
-def order_status(db, orderid, statusid):
+def order_status(db, orderid, statusid, comment, userid=None):
     """
     Zmiana statusu zamówienia
 
     :param int orderid: Id zamówienia
     :param int statusid: Id statusu
+    :param str comment: Komentarz do zmiany statusu
+    :param int userid: Id administratora
     """
 
     cur = db.cursor()
@@ -26,3 +28,36 @@ def order_status(db, orderid, statusid):
     cur = db.cursor()
     cur.execute(sql, data)
     db.commit()
+
+
+    cur = db.cursor()
+
+    data = {}
+    data['comment'] = comment
+    data['userid'] = userid
+    data['statusid'] = statusid
+    data['orderid'] = orderid
+
+    sql = """
+            INSERT INTO orderhistory
+            (
+                idorderhistory,
+                `content`,
+                addid,
+                orderstatusid,
+                orderid
+            )
+            VALUES
+            (
+                NULL,
+                %(comment)s,
+                %(userid)s,
+                %(statusid)s,
+                %(orderid)s
+            )
+          """
+
+    cur = db.cursor()
+    cur.execute(sql, data)
+    db.commit()
+
