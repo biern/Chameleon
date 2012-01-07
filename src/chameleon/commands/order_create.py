@@ -7,14 +7,14 @@ import string
 
 
 @api.register
-def order_create(db, dispatchid, paymentid, customeropinion, userid=None, shopid=None, encryption_key=None, languageid=None):
+def order_create(db, dispatchid, paymentid, customeropinion, clientid=0, shopid=None, encryption_key=None, languageid=None):
     """
     Tworzenie nowego zamówienia
 
     :param int dispatchid: Identyfikator sposobu wysyłki
     :param int paymentid: Identyfikator płatności
     :param str customeropinion: Opinia klienta
-    :param int userid: Id użytkownika
+    :param int clientid: Id klienta
     :param int shopid: Id sklepu
     :param str encryption_key: Hasz szyfrowania bazy
     """
@@ -108,7 +108,7 @@ def order_create(db, dispatchid, paymentid, customeropinion, userid=None, shopid
     data['paymentName'] = paymentName
     data['dispatchid'] = dispatchid
     data['paymentid'] = paymentid
-    data['userid'] = userid
+    data['clientid'] = clientid
     data['customeropinion'] = customeropinion
     data['currencyId'] = currencyId
     data['currencyName'] = currencyName
@@ -133,7 +133,8 @@ def order_create(db, dispatchid, paymentid, customeropinion, userid=None, shopid
             sessionid,
             viewid,
             globalqty,
-            globalpricenetto
+            globalpricenetto,
+            clientid
         )
         VALUES
         (
@@ -146,14 +147,15 @@ def order_create(db, dispatchid, paymentid, customeropinion, userid=None, shopid
             %(paymentName)s,
             %(dispatchid)s,
             %(paymentid)s,
-            %(userid)s,
+            NULL,
             %(customeropinion)s,
             %(currencyId)s,
             %(currencyName)s,
             %(sessionId)s,
             %(shopid)s,
             0,
-            0
+            0,
+            %(clientid)s
         )
         """
     

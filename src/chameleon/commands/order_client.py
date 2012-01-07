@@ -3,7 +3,7 @@
 from chameleon import api
 
 @api.register
-def order_client(db, orderid, firstname, surname, companyname, nip, street, streetno, placeno, postcode, place, phone, email, encryption_key=None): 
+def order_client(db, orderid, firstname, surname, companyname, nip, street, streetno, placeno, postcode, place, phone, email, clientid=0, encryption_key=None): 
     """
     Tworzenie nowych danych płatnika 
 
@@ -19,6 +19,7 @@ def order_client(db, orderid, firstname, surname, companyname, nip, street, stre
     :param str place: Miejscowość
     :param str phone: Telefon
     :param str email: Email
+    :param int clientid: Id klienta
     :param str encryption_key: Hash szyfrowania bazy
     """
 
@@ -37,6 +38,7 @@ def order_client(db, orderid, firstname, surname, companyname, nip, street, stre
     data['place'] = place
     data['phone'] = phone
     data['email'] = email
+    data['clientid'] = clientid
     data['encryption_key'] = encryption_key
     
 
@@ -53,7 +55,9 @@ def order_client(db, orderid, firstname, surname, companyname, nip, street, stre
             email = AES_ENCRYPT(%(email)s, %(encryption_key)s),
             street = AES_ENCRYPT(%(street)s, %(encryption_key)s), 
             streetno = AES_ENCRYPT(%(streetno)s, %(encryption_key)s),
-            placeno = AES_ENCRYPT(%(placeno)s, %(encryption_key)s)
+            placeno = AES_ENCRYPT(%(placeno)s, %(encryption_key)s),
+            clientid = %(clientid)s
+
         """
 
     cur = db.cursor()
