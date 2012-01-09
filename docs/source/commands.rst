@@ -54,6 +54,36 @@ image_add
 
 .. automethod:: chameleon.commands.image_add.perform
 
+order_client
+^^^^^^^^^^^^
+
+.. automethod:: chameleon.commands.order_client.perform
+
+order_create
+^^^^^^^^^^^^
+
+.. automethod:: chameleon.commands.order_create.perform
+
+order_delivery
+^^^^^^^^^^^^^^
+
+.. automethod:: chameleon.commands.order_delivery.perform
+
+order_note
+^^^^^^^^^^
+
+.. automethod:: chameleon.commands.order_note.perform
+
+order_product
+^^^^^^^^^^^^^
+
+.. automethod:: chameleon.commands.order_product.perform
+
+order_status
+^^^^^^^^^^^^
+
+.. automethod:: chameleon.commands.order_status.perform
+
 producer_add
 ^^^^^^^^^^^^
 
