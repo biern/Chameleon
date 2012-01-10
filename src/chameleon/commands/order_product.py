@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from chameleon import api
+import time
 
 @api.register
 def order_product(db, orderid, productid, qty, productattributeid=None, languageid=None):
@@ -25,7 +26,11 @@ def order_product(db, orderid, productid, qty, productattributeid=None, language
             SELECT
                 p.sellprice,
                 v.value,
-                t.name
+                t.name,
+                p.promotion,
+                p.discountprice,
+                p.promotionstart,
+                p.promotionend
             FROM
                 product as p
             INNER JOIN
@@ -48,9 +53,23 @@ def order_product(db, orderid, productid, qty, productattributeid=None, language
         raise IOError('This product not exist')
 
     priceSql = product[0]
+    
+    isPromotion = 0
+
+
+    # Sprawdzamy, czy nie ma promocji
+    if product[3] == 1:
+        formatTime = '%Y-%m-%d'
+        timeStart = time.mktime(time.strptime(str(product[5]), formatTime))
+        timeEnd = time.mktime(time.strptime(str(product[6]), formatTime))
+
+        if time.time() >= timeStart and time.time() <= timeEnd:
+            # Mamy promocje
+            isPromotion = 1
+            priceSql = product[4]
 
     # Jeżeli użytkownik podał wariant, zmieniamy cene netto
-    if productattributeid is not None:
+    if productattributeid is not None and isPromotion == 0:
         cur.execute(
         """
             SELECT
