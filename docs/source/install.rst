@@ -49,6 +49,8 @@ Jeśli nie chcemy instalować paczki globalnie, można korzystać zamiennie ze s
    cd Chameleon/tests
    ./chameleon
 
+.. _conf-example:
+
 Konfiguracja
 ------------
 

@@ -9,7 +9,7 @@ Dostępne wywołania API
 Przy wywoływaniu metod z linii poleceń pierwszy argument, ``db`` czyli
 bazę danych należy pominąć. Zostaje ona stworzona i przesłana
 automatycznie na podstawie pliku konfiguracyjnego znajdującego się w
-drzewie katalogów. (tutaj link)
+drzewie katalogów. (:ref:`conf-example`)
 
 .. Generacja tej listy:
    ls ../src/chameleon/commands/*.py | cut -d "/" -f 5 | cut -d "." -f 1 | sort | grep -v __init__ | xclip -i
