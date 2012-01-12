@@ -154,6 +154,13 @@ product_add_variant
 
 .. automethod:: chameleon.commands.product_add_variant.perform
 
+product_crosssell
+^^^^^^^^^^^^^^^^^
+
+.. autoclass:: chameleon.commands.product_crosssell.product_crosssell
+
+.. automethod:: chameleon.commands.product_crosssell.perform
+
 product_edit_basic_information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -195,6 +202,27 @@ products_csv_import
 .. .. autoclass:: chameleon.commands.products_dir_update.products_dir_update
 
 .. .. automethod:: chameleon.commands.products_dir_update.perform
+
+product_promotion
+^^^^^^^^^^^^^^^^^
+
+.. autoclass:: chameleon.commands.product_promotion.product_promotion
+
+.. automethod:: chameleon.commands.product_promotion.perform
+
+product_set_new
+^^^^^^^^^^^^^^^
+
+.. autoclass:: chameleon.commands.product_set_new.product_set_new
+
+.. automethod:: chameleon.commands.product_set_new.perform
+
+product_similar
+^^^^^^^^^^^^^^^
+
+.. autoclass:: chameleon.commands.product_similar.product_similar
+
+.. automethod:: chameleon.commands.product_similar.perform
 
 product_update
 ^^^^^^^^^^^^^^
