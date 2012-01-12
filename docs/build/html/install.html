@@ -87,7 +87,7 @@ sudo python setup.py install
 </div>
 </div>
 <div class="section" id="konfiguracja">
-<h2>Konfiguracja<a class="headerlink" href="#konfiguracja" title="Permalink to this headline">¶</a></h2>
+<span id="conf-example"></span><h2>Konfiguracja<a class="headerlink" href="#konfiguracja" title="Permalink to this headline">¶</a></h2>
 <p>Projekt do działania wymaga utworzenia pliku konfiguracyjnego gdzieś w drzewie katalogów, w którym został uruchomiony. Skrypt przeszukuje katalogi w górę, poczynając od aktualnego, w poszukiwaniu pliku <tt class="docutils literal"><span class="pre">chameleon_conf.py</span></tt>.</p>
 <p>Przykładowy plik konfiguracyjny:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
@@ -106,13 +106,19 @@ sudo python setup.py install
 <span class="c"># o własne, lub w ogóle pominąć jednak oszczędza on przesyłania za każdym</span>
 <span class="c"># razem tych samych wartości do wszystkich wywołań.</span>
 <span class="n">DEFAULT_ARGS</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c"># &#39;Pospilite&#39; parametry:</span>
   <span class="s">&#39;userid&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c"># oznacza użytkownika, w którego imię skrypt przeprowadza akcje</span>
   <span class="s">&#39;languageid&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="c"># id języka dla którego wprowadzamy tłumaczenia</span>
   <span class="s">&#39;shopid&#39;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="c"># id sklepu w którym wprowadzamy zmiany</span>
 
-  <span class="c"># katalog w ktorym znajduje się &#39;index.php&#39;</span>
-  <span class="c"># wykorzystywany tylko przez niektóre polecenia</span>
-  <span class="s">&#39;root_path&#39;</span><span class="p">:</span> <span class="s">&#39;/absolutna/sciezka/do/miejsca/instalacji/gekosale&#39;</span><span class="p">,</span>
+  <span class="c"># Parametry wykorzystywane tylko przez niektóre polecenia:</span>
+
+  <span class="c"># Absolutna ścieżka do miejsca instalacji gekosale,</span>
+  <span class="c"># czyli katalog w ktorym znajduje się &#39;index.php&#39;.</span>
+  <span class="s">&#39;root_path&#39;</span> <span class="p">:</span> <span class="s">&#39;/usr/local/zend/apache2/htdocs/gekosale&#39;</span><span class="p">,</span>
+
+  <span class="c"># Klucz szyfrujący z pliku settings.php jako client_data_encription_string</span>
+  <span class="s">&#39;encryption_key&#39;</span> <span class="p">:</span> <span class="s">&#39;eaf3b0d871ca966048deb427f54d35d7&#39;</span><span class="p">,</span>
 <span class="p">}</span>
 </pre></div>
 </div>

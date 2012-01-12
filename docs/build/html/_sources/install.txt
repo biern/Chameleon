@@ -49,6 +49,8 @@ Jeśli nie chcemy instalować paczki globalnie, można korzystać zamiennie ze s
    cd Chameleon/tests
    ./chameleon
 
+.. _conf-example:
+
 Konfiguracja
 ------------
 
@@ -74,13 +76,19 @@ Przykładowy plik konfiguracyjny:
    # o własne, lub w ogóle pominąć jednak oszczędza on przesyłania za każdym
    # razem tych samych wartości do wszystkich wywołań.
    DEFAULT_ARGS = {
+     # 'Pospilite' parametry:
      'userid': 1, # oznacza użytkownika, w którego imię skrypt przeprowadza akcje
      'languageid': 1, # id języka dla którego wprowadzamy tłumaczenia
      'shopid' : 3, # id sklepu w którym wprowadzamy zmiany
 
-     # katalog w ktorym znajduje się 'index.php'
-     # wykorzystywany tylko przez niektóre polecenia
-     'root_path': '/absolutna/sciezka/do/miejsca/instalacji/gekosale',
+     # Parametry wykorzystywane tylko przez niektóre polecenia:
+
+     # Absolutna ścieżka do miejsca instalacji gekosale,
+     # czyli katalog w ktorym znajduje się 'index.php'.
+     'root_path' : '/usr/local/zend/apache2/htdocs/gekosale',
+
+     # Klucz szyfrujący z pliku settings.php jako client_data_encription_string
+     'encryption_key' : 'eaf3b0d871ca966048deb427f54d35d7',
    }
 
 Jeśli korzystamy ze skryptu tests/chameleon , należy zastąpić istniejący plik tests/chameleon_conf.py własnymi ustawieniami.
