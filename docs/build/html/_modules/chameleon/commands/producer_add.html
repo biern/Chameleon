@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chameleon.commands.producer_add &mdash; Chameleon v0.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Chameleon v0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="chameleon.commands" href="../commands.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../../index.html">Chameleon v0.2 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../commands.html" accesskey="U">chameleon.commands</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for chameleon.commands.producer_add</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">chameleon</span> <span class="kn">import</span> <span class="n">api</span>
+
+
+<span class="nd">@api.register</span>
+<div class="viewcode-block" id="producer_add"><a class="viewcode-back" href="../../../commands.html#chameleon.commands.producer_add.producer_add">[docs]</a><span class="k">def</span> <span class="nf">producer_add</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">www</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span>
+                 <span class="n">producerid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">photoid</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">keyword_title</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">keyword_description</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">languageid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">userid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">shopid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add producer or translation</span>
+
+<span class="sd">    :param int producerid: If greater than 0, add only translation</span>
+<span class="sd">    :param str name: Nazwa</span>
+<span class="sd">    :param str www: Adres URL</span>
+<span class="sd">    :param str description: Opis </span>
+<span class="sd">    :param str keyword_title: Meta tytuł</span>
+<span class="sd">    :param str keyword: Słowa kluczowe</span>
+<span class="sd">    :param str keyword_description: Meta opis</span>
+<span class="sd">    :param int photoid: Id zdjęcia</span>
+<span class="sd">    :param int languageid: Id języka</span>
+<span class="sd">    :param int userid: Id użytkownika</span>
+<span class="sd">    :param int shopid: Id sklepu</span>
+<span class="sd">    :return: Added / updated producer id</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span>
+                <span class="s">&#39;required&#39;</span><span class="p">,</span>
+                <span class="p">(</span><span class="s">&#39;language_unique&#39;</span><span class="p">,</span>
+                 <span class="p">{</span><span class="s">&#39;table&#39;</span><span class="p">:</span> <span class="s">&#39;producertranslation&#39;</span><span class="p">,</span> <span class="s">&#39;column&#39;</span><span class="p">:</span> <span class="s">&#39;name&#39;</span><span class="p">}))</span>
+
+    <span class="k">if</span> <span class="n">producerid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">        INSERT INTO producer (addid, photoid) VALUES (</span><span class="si">%(addid)s</span><span class="s">,</span>
+<span class="s">        </span><span class="si">%(photoid)s</span><span class="s">)&quot;&quot;&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;photoid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">photoid</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;addid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">userid</span>
+
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="n">producerid</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">lastrowid</span>
+
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO producertranslation (</span>
+<span class="s">               producerid,</span>
+<span class="s">               name,</span>
+<span class="s">               seo,</span>
+<span class="s">               description,</span>
+<span class="s">               keyword_title,</span>
+<span class="s">               keyword,</span>
+<span class="s">               keyword_description,</span>
+<span class="s">               languageid</span>
+<span class="s">          )</span>
+<span class="s">          VALUES</span>
+<span class="s">          (</span>
+<span class="s">               </span><span class="si">%(producerid)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(name)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(seo)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(description)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(keyword_title)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(keyword)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(keyword_description)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(languageid)s</span><span class="s"></span>
+<span class="s">          )&quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;producerid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">producerid</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;seo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">www</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;keyword_title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keyword_title</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;keyword&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keyword</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;keyword_description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">keyword_description</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;languageid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">languageid</span>
+
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;INSERT INTO producerview (</span>
+<span class="s">               idproducerview,</span>
+<span class="s">               producerid,</span>
+<span class="s">               viewid,</span>
+<span class="s">               addid</span>
+<span class="s">          )</span>
+<span class="s">          VALUES</span>
+<span class="s">          (    </span>
+<span class="s">               NULL,</span>
+<span class="s">               </span><span class="si">%(producerid)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(shopid)s</span><span class="s">,</span>
+<span class="s">               </span><span class="si">%(userid)s</span><span class="s"></span>
+<span class="s">          )&quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;producerid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">producerid</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;shopid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">shopid</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;userid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">userid</span>
+
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">producerid</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../../index.html">Chameleon v0.2 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../commands.html" >chameleon.commands</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Marcin Biernat, Jakub Osika, Kacper Szurek.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>chameleon.commands.order_product &mdash; Chameleon v0.2 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="Chameleon v0.2 documentation" href="../../../index.html" />
+    <link rel="up" title="chameleon.commands" href="../commands.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../../index.html">Chameleon v0.2 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../commands.html" accesskey="U">chameleon.commands</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for chameleon.commands.order_product</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">chameleon</span> <span class="kn">import</span> <span class="n">api</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="nd">@api.register</span>
+<div class="viewcode-block" id="order_product"><a class="viewcode-back" href="../../../commands.html#chameleon.commands.order_product.order_product">[docs]</a><span class="k">def</span> <span class="nf">order_product</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">orderid</span><span class="p">,</span> <span class="n">productid</span><span class="p">,</span> <span class="n">qty</span><span class="p">,</span> <span class="n">productattributeid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">languageid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dodawanie produktu do nowego zamówienia</span>
+
+<span class="sd">    :param int orderid: Id zamówienia</span>
+<span class="sd">    :param int productid: Id produktu</span>
+<span class="sd">    :param int qty: Ilość produktu</span>
+<span class="sd">    :param int productattributeid: Id atrybuty produktu</span>
+<span class="sd">    :param int languageid: Id języka</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="c"># Get info about product</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;productid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">productid</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;languageid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">languageid</span>
+
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">            SELECT</span>
+<span class="s">                p.sellprice,</span>
+<span class="s">                v.value,</span>
+<span class="s">                t.name,</span>
+<span class="s">                p.promotion,</span>
+<span class="s">                p.discountprice,</span>
+<span class="s">                p.promotionstart,</span>
+<span class="s">                p.promotionend</span>
+<span class="s">            FROM</span>
+<span class="s">                product as p</span>
+<span class="s">            INNER JOIN</span>
+<span class="s">                vat as v</span>
+<span class="s">            ON</span>
+<span class="s">                p.vatid = v.idvat</span>
+<span class="s">            INNER JOIN</span>
+<span class="s">                producttranslation as t</span>
+<span class="s">            ON</span>
+<span class="s">                p.idproduct = t.productid</span>
+<span class="s">                AND t.languageid = </span><span class="si">%(languageid)s</span><span class="s"></span>
+<span class="s">            WHERE</span>
+<span class="s">                p.idproduct = </span><span class="si">%(productid)s</span><span class="s"></span>
+<span class="s">        &quot;&quot;&quot;</span>
+    
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">product</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">product</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;This product not exist&#39;</span><span class="p">)</span>
+
+    <span class="n">priceSql</span> <span class="o">=</span> <span class="n">product</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="n">isPromotion</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+    <span class="c"># Sprawdzamy, czy nie ma promocji</span>
+    <span class="k">if</span> <span class="n">product</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">formatTime</span> <span class="o">=</span> <span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s">&#39;</span>
+        <span class="n">timeStart</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">product</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span> <span class="n">formatTime</span><span class="p">))</span>
+        <span class="n">timeEnd</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">product</span><span class="p">[</span><span class="mi">6</span><span class="p">]),</span> <span class="n">formatTime</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">timeStart</span> <span class="ow">and</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">timeEnd</span><span class="p">:</span>
+            <span class="c"># Mamy promocje</span>
+            <span class="n">isPromotion</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">priceSql</span> <span class="o">=</span> <span class="n">product</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="c"># Jeżeli użytkownik podał wariant, zmieniamy cene netto</span>
+    <span class="k">if</span> <span class="n">productattributeid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">isPromotion</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            SELECT</span>
+<span class="sd">                attributeprice</span>
+<span class="sd">            FROM</span>
+<span class="sd">                productattributeset</span>
+<span class="sd">            WHERE</span>
+<span class="sd">                idproductattributeset = %s</span>
+<span class="sd">        &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">productattributeid</span><span class="p">))</span>
+    
+        <span class="n">priceSql</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c"># Musimy też stworzyć dodatkowe info na temat wariantu</span>
+        
+        <span class="c"># Pobieramy nazwę atrubutu</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                SELECT</span>
+<span class="sd">                    d.name,</span>
+<span class="sd">                    e.name as b</span>
+<span class="sd">                FROM</span>
+<span class="sd">                    productattributevalueset as c</span>
+<span class="sd">                INNER JOIN</span>
+<span class="sd">                    attributeproductvalue as d</span>
+<span class="sd">                ON</span>
+<span class="sd">                    c.attributeproductvalueid = d.idattributeproductvalue</span>
+<span class="sd">                INNER JOIN</span>
+<span class="sd">                    attributeproduct as e</span>
+<span class="sd">                ON</span>
+<span class="sd">                    d.attributeproductid = e.idattributeproduct</span>
+<span class="sd">                WHERE</span>
+<span class="sd">                    c.productattributesetid = %s</span>
+
+<span class="sd">            &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">productattributeid</span><span class="p">))</span>
+
+        <span class="n">atributeArray</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> 
+
+    <span class="n">name</span> <span class="o">=</span> <span class="n">product</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">price</span> <span class="o">=</span> <span class="n">priceSql</span><span class="o">*</span><span class="p">((</span><span class="n">product</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">100</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span> <span class="c"># kwota brutto jednego produktu</span>
+    <span class="n">qtyprice</span> <span class="o">=</span> <span class="n">qty</span><span class="o">*</span><span class="n">price</span> <span class="c">#qty * kwota brutto</span>
+    <span class="n">vat</span> <span class="o">=</span> <span class="p">(</span><span class="n">product</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">*</span><span class="n">priceSql</span> <span class="c"># kwota vat z jednego produktu</span>
+    <span class="n">pricenetto</span> <span class="o">=</span> <span class="n">priceSql</span> <span class="c"># kwota netto jednego produktu </span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;orderid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orderid</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;productid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">productid</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;price&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">price</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;qty&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">qty</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;qtyprice&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">qtyprice</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;vat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vat</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;pricenetto&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pricenetto</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;productattributeid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">productattributeid</span>
+
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">        INSERT INTO orderproduct SET</span>
+<span class="s">            orderid = </span><span class="si">%(orderid)s</span><span class="s">, </span>
+<span class="s">            productid = </span><span class="si">%(productid)s</span><span class="s">,</span>
+<span class="s">            name = </span><span class="si">%(name)s</span><span class="s">,</span>
+<span class="s">            price = </span><span class="si">%(price)s</span><span class="s">,</span>
+<span class="s">            qty = </span><span class="si">%(qty)s</span><span class="s">,</span>
+<span class="s">            qtyprice = </span><span class="si">%(qtyprice)s</span><span class="s">,</span>
+<span class="s">            productattributesetid = </span><span class="si">%(productattributeid)s</span><span class="s">,</span>
+<span class="s">            vat = </span><span class="si">%(vat)s</span><span class="s">,</span>
+<span class="s">            pricenetto = </span><span class="si">%(pricenetto)s</span><span class="s"></span>
+<span class="s">        &quot;&quot;&quot;</span>
+
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="n">orderproductid</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">lastrowid</span>
+
+    <span class="k">if</span> <span class="n">productattributeid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;attributeName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">atributeArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;attributeGroup&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">atributeArray</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">&#39;orderproductid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orderproductid</span>
+
+        <span class="c"># Dodajemy nazwę i typ atrybutu do tabeli łączącej</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">            INSERT INTO orderproductattribute</span>
+<span class="s">            (</span>
+<span class="s">                idorderproductattribute,</span>
+<span class="s">                `name`,</span>
+<span class="s">                `group`,</span>
+<span class="s">                orderproductid</span>
+<span class="s">            )</span>
+<span class="s">            VALUES</span>
+<span class="s">            (</span>
+<span class="s">                NULL,</span>
+<span class="s">                </span><span class="si">%(attributeName)s</span><span class="s">,</span>
+<span class="s">                </span><span class="si">%(attributeGroup)s</span><span class="s">,</span>
+<span class="s">                </span><span class="si">%(orderproductid)s</span><span class="s"></span>
+<span class="s">            )</span>
+<span class="s">            &quot;&quot;&quot;</span>
+
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+    <span class="c"># Musimy pobrać id wysyłki bieżącego zamówienia</span>
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            SELECT</span>
+<span class="sd">                dispatchmethodid</span>
+<span class="sd">            FROM</span>
+<span class="sd">                `order`</span>
+<span class="sd">            WHERE</span>
+<span class="sd">                `idorder` = %s</span>
+<span class="sd">        &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">orderid</span><span class="p">))</span>
+
+    <span class="n">dispatchid</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c"># Musimy pobrać bieżąca cene zamówienia</span>
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">        UPDATE `order` SET  </span>
+<span class="s">            price = price + </span><span class="si">%(qtyprice)s</span><span class="s"> </span>
+<span class="s">        WHERE</span>
+<span class="s">            idorder = </span><span class="si">%(orderid)s</span><span class="s"></span>
+<span class="s">    &quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;qtyprice&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">qtyprice</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;orderid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orderid</span>
+
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        SELECT</span>
+<span class="sd">            price    </span>
+<span class="sd">        FROM</span>
+<span class="sd">            `order`   </span>
+<span class="sd">        WHERE</span>
+<span class="sd">            idorder = %s</span>
+<span class="sd">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">orderid</span><span class="p">))</span>
+
+    <span class="n">currentPrice</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c"># Pobieramy bieżącą cene wysyłki</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        SELECT</span>
+<span class="sd">            dispatchmethodcost,</span>
+<span class="sd">            vat</span>
+<span class="sd">        FROM</span>
+<span class="sd">            dispatchmethodprice</span>
+<span class="sd">        WHERE</span>
+<span class="sd">            dispatchmethodid = %s</span>
+<span class="sd">            AND %s &gt;= `from`</span>
+<span class="sd">            AND %s &lt;= `to`</span>
+<span class="sd">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">dispatchid</span><span class="p">,</span> <span class="n">currentPrice</span><span class="p">,</span> <span class="n">currentPrice</span><span class="p">))</span>
+
+    <span class="n">dispatchArray</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+    <span class="n">dispatchCost</span> <span class="o">=</span> <span class="n">dispatchArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dispatchVat</span> <span class="o">=</span> <span class="n">dispatchArray</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">dispatchCost</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s">&#39;Dispatch method cost not exist for this price&#39;</span><span class="p">)</span>
+
+    <span class="c"># Musimy sprawdzić czy trzeba doliczyć vat do przesyłki</span>
+    <span class="k">if</span> <span class="n">dispatchVat</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                    SELECT</span>
+<span class="sd">                        value</span>
+<span class="sd">                    FROM</span>
+<span class="sd">                        vat</span>
+<span class="sd">                    WHERE</span>
+<span class="sd">                        idvat = %s</span>
+<span class="sd">                &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">dispatchVat</span><span class="p">))</span>
+
+            <span class="n">dispatchCost</span> <span class="o">=</span> <span class="n">dispatchCost</span><span class="o">*</span><span class="p">(</span><span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    
+
+    <span class="c"># Musimy zupdatować dane w tabeli order, gdyż dodaliśmy nowy produkt</span>
+    <span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="s">        UPDATE `order` SET  </span>
+<span class="s">            dispatchmethodprice = </span><span class="si">%(dispatchCost)s</span><span class="s">,</span>
+<span class="s">            globalprice = price + dispatchmethodprice</span>
+<span class="s">        WHERE</span>
+<span class="s">            idorder = </span><span class="si">%(orderid)s</span><span class="s"></span>
+<span class="s">        &quot;&quot;&quot;</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;dispatchCost&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dispatchCost</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;orderid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orderid</span>
+
+    <span class="n">cur</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+
+    <span class="k">return</span> <span class="n">orderproductid</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../../index.html">Chameleon v0.2 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../commands.html" >chameleon.commands</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Marcin Biernat, Jakub Osika, Kacper Szurek.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
