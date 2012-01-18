@@ -7,12 +7,12 @@ from chameleon import api
 def product_promotion(db, productid, price, start, end, active=1):
     """
     Set promotion for product
-    
+
     :param int active: Czy aktywować promocje
     :param int productid: Id produktu
     :param float price: Cena zniżki
-    :param string start: Data startu zniżki
-    :param string end: Data zakończenia zniżki
+    :param str start: Data startu zniżki ("YYYY-MM-DD")
+    :param str end: Data zakończenia zniżki ("YYYY-MM-DD")
     """
 
     cur = db.cursor()

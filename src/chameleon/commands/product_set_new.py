@@ -7,9 +7,9 @@ from chameleon import api
 def product_set_new(db, productid, end, active=1, userid=None):
     """
     Set product as new
- 
+
     :param int productid: Id produktu
-    :param string end: Data zakończenia nowości
+    :param str end: Data zakończenia nowości ("YYYY-MM-DD")
     :param int active: Czy aktywować nowość
     :param int userid: Id administratora
     """
@@ -43,4 +43,3 @@ def product_set_new(db, productid, end, active=1, userid=None):
     cur = db.cursor()
     cur.execute(sql, data)
     db.commit()
-
