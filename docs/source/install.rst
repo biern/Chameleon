@@ -87,7 +87,8 @@ Przykładowy plik konfiguracyjny:
      # czyli katalog w ktorym znajduje się 'index.php'.
      'root_path' : '/usr/local/zend/apache2/htdocs/gekosale',
 
-     # Klucz szyfrujący z pliku settings.php jako client_data_encription_string
+     # Klucz szyfrujący z pliku $root_path/config/settings.php,
+     # zapisany w 'client_data_encription_string'
      'encryption_key' : 'eaf3b0d871ca966048deb427f54d35d7',
    }
 
