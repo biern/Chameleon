@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Przykład użycia &mdash; Chameleon v0.2 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Chameleon v0.2 documentation" href="index.html" />
+    <link rel="next" title="Pełna referencja API" href="commands.html" />
+    <link rel="prev" title="Instalacja" href="install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="commands.html" title="Pełna referencja API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Instalacja"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Chameleon v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="przyklad-uzycia">
+<span id="example"></span><h1>Przykład użycia<a class="headerlink" href="#przyklad-uzycia" title="Permalink to this headline">¶</a></h1>
+<p>Najpierw należy upewnić się, że polecenie <tt class="docutils literal"><span class="pre">chameleon</span></tt> odnalazło plik konfiguracyjny i nawiązuje połączenie z bazą danych. W tym celu wystarczy wywołać:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>chameleon
+</pre></div>
+</div>
+<p>Jeśli aplikacja odnalazła plik konfiguracyjny i udało się nawiązać połączenie, powinny zostać wypisane możliwe polecenia.</p>
+<p>Skrypt <tt class="docutils literal"><span class="pre">chameleon</span></tt> pozwala wywoływać wszystkie polecenia z API (<a class="reference internal" href="commands.html"><em>Pełna referencja API</em></a>) bezpośrednio z shella. Aby zobaczyć pełną dokumentację polecenia wystarczy dodać przełącznik <tt class="docutils literal"><span class="pre">-h</span></tt>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>chameleon product_add -h
+
+positional arguments:
+  name                  Nazwa produktu
+  url                   URL produktu
+  stock                 Stan magazynowy
+  vatid
+  buyprice              Cena netto zakupu
+  sellprice             Cena netto sprzedaży
+  weight                Waga produktu
+
+ optional arguments:
+   -h, --help            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+   --languageid LANGUAGEID
+                         Id języka <span class="o">(</span>default: 1<span class="o">)</span>
+   --userid USERID       Id użytkownika <span class="o">(</span>default: 1<span class="o">)</span>
+</pre></div>
+</div>
+<p>Argumenty pozycyjne (name, url, ...) są obowiązkowe, pozostałe można dodać lub nie stosując odpowiadjące im flagi.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>chameleon product_add <span class="s2">&quot;jakiś produkt&quot;</span> url 10 3 80 100 10 --userid 1
+</pre></div>
+</div>
+<p>Warto zauważyć, że domyślne wartości dla tych argumentów są pobierane z pliku konfiguracyjnego (sekcja <tt class="docutils literal"><span class="pre">DEFAULT_ARGS</span></tt>), jeśli chcemy, możemy je przeładować podając je explicite, jak powyżej.</p>
+<div class="section" id="przeglad-funkcjonalnosci">
+<h2>Przegląd funkcjonalności<a class="headerlink" href="#przeglad-funkcjonalnosci" title="Permalink to this headline">¶</a></h2>
+<p>Wszystkie wywołania są dostępne w identycznej formie z poziomu pythona lub shella. Ninjeszy przykład demonstruje sposób użycia większości z nich:</p>
+<p>(skrypt ten można znaleźć w <tt class="docutils literal"><span class="pre">Chameleon/tests/main_functionality.py</span></tt>)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;../src&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">chameleon.db</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">chameleon.commands</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">uniqId</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+    <span class="c"># Utworzenie nowej kategorii</span>
+    <span class="n">categoryId</span> <span class="o">=</span> <span class="n">category_add</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&quot;Nowa kategoria &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="s">&quot;nowa_kategoria_url_&quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="s">&quot;Krótki opis&quot;</span><span class="p">,</span>
+                                          <span class="s">&quot;Dłuższy opis&quot;</span><span class="p">,</span> <span class="s">&quot;Meta tytuł&quot;</span><span class="p">,</span> <span class="s">&quot;Słowa kluczowe&quot;</span><span class="p">,</span>
+                                          <span class="s">&quot;Meta opis&quot;</span><span class="p">)</span>
+
+    <span class="c"># Utworzenie głównej kategorii</span>
+    <span class="n">mainCategoryId</span> <span class="o">=</span> <span class="n">category_add</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&quot;Nowa kategoria główna &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="s">&quot;nowa_kategoria_glowna_url_&quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="s">&quot;Krótki opis główny&quot;</span><span class="p">,</span>
+                                          <span class="s">&quot;Dłuższy opis główny&quot;</span><span class="p">,</span> <span class="s">&quot;Meta tytuł główny&quot;</span><span class="p">,</span> <span class="s">&quot;Słowa kluczowe główne&quot;</span><span class="p">,</span>
+                                          <span class="s">&quot;Meta opis główne&quot;</span><span class="p">)</span>
+
+    <span class="c"># Ustawiamy główną kategorię</span>
+    <span class="n">category_change_main</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">categoryId</span><span class="p">,</span> <span class="n">mainCategoryId</span><span class="p">)</span>
+
+    <span class="c"># Utworzenie nowego dostawcy</span>
+    <span class="n">delivererId</span> <span class="o">=</span> <span class="n">deliverer_add</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&quot;Nowy dostawca &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="s">&quot;www.strona_dostawcy.pl&quot;</span><span class="p">,</span> <span class="s">&quot;email@dostawcy002.pl&quot;</span><span class="p">)</span>
+
+    <span class="c"># Utworzenie nowego producenta</span>
+    <span class="n">producerId</span> <span class="o">=</span> <span class="n">producer_add</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&quot;Nowy producent &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="s">&quot;nowy_producent_url_&quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="s">&quot;opis nowego producenta&quot;</span><span class="p">)</span>
+
+    <span class="c"># Utworzenie nowego produktu i dodanie go do nowo utworzonej</span>
+    <span class="c"># kategori, dostawcy i producenta</span>
+    <span class="c"># 1 - stan magazynowy</span>
+    <span class="c"># 5 - VAT-ID</span>
+    <span class="c"># 100.10 - Cena zakupu</span>
+    <span class="c"># 200.30 - Cena sprzedaży</span>
+    <span class="c"># 10.50 - Waga</span>
+    <span class="n">productId</span> <span class="o">=</span> <span class="n">product_add</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&quot;Nowy dodany produkt &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="s">&quot;url_dodanego_produktu_&quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">100.10</span><span class="p">,</span> <span class="mf">200.30</span><span class="p">,</span> <span class="mf">10.50</span><span class="p">)</span>
+
+    <span class="c"># Ustawiamy kategorię dla tego produktu</span>
+    <span class="n">product_add_to_category</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">productId</span><span class="p">,</span> <span class="n">categoryId</span><span class="p">)</span>
+    <span class="n">product_add_to_category</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">productId</span><span class="p">,</span> <span class="n">mainCategoryId</span><span class="p">)</span>
+
+    <span class="c"># Uzupełnienie podstawowych informacji w produkcie</span>
+    <span class="n">product_edit_basic_information</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">productId</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;KOD EAN&quot;</span><span class="p">,</span> <span class="s">&quot;Kod dostawcy&quot;</span><span class="p">,</span> <span class="n">producerId</span><span class="p">,</span> <span class="n">delivererId</span><span class="p">)</span>
+
+    <span class="c"># Uzupełnienie meta informacji</span>
+    <span class="n">product_edit_meta</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">productId</span><span class="p">,</span> <span class="s">&quot;Meta tytuł&quot;</span><span class="p">,</span> <span class="s">&quot;Słowa kluczowe&quot;</span><span class="p">,</span> <span class="s">&quot;Meta opis&quot;</span><span class="p">)</span>
+
+    <span class="c"># Uzupełnianie opisu</span>
+    <span class="n">product_edit_description</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">productId</span><span class="p">,</span> <span class="s">&quot;Krótki opis&quot;</span><span class="p">,</span> <span class="s">&quot;Normalny opis&quot;</span><span class="p">,</span> <span class="s">&quot;Dodatkowe informacje&quot;</span><span class="p">)</span>
+
+    <span class="c"># Ustawienie informacji o dostawie i magazynie</span>
+    <span class="n">product_edit_stock</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">productId</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">100.45</span><span class="p">)</span>
+
+    <span class="c"># Dodanie zdjęcia do gekosale</span>
+    <span class="n">imageId</span> <span class="o">=</span> <span class="n">image_add</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c"># Dodanie zdjęcia do produktu i ustawienie go jako główne</span>
+    <span class="n">product_add_image</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">productId</span><span class="p">,</span> <span class="n">imageId</span><span class="p">)</span>
+
+    <span class="c"># Tworzymy nową grupę cech</span>
+    <span class="n">attributeGroupId</span> <span class="o">=</span> <span class="n">attribute_add_group</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&quot;Nowa grupa cech &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">)</span>
+
+    <span class="c"># Dodajemy nowe cechy</span>
+    <span class="n">attributePropertyId</span> <span class="o">=</span> <span class="n">attribute_add_property</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">attributeGroupId</span><span class="p">,</span> <span class="s">&quot;Wielkość &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">)</span>
+
+    <span class="c"># Dodajemy cechę do utworzonej kategorii</span>
+    <span class="n">attribute_add_to_category</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">attributeGroupId</span><span class="p">,</span> <span class="n">attributePropertyId</span><span class="p">,</span> <span class="n">categoryId</span><span class="p">)</span>
+
+    <span class="c"># Dodajemy wartości do cechy</span>
+    <span class="n">xValueId</span> <span class="o">=</span> <span class="n">attribute_add_value</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&quot;Wielkość X &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="n">attributePropertyId</span><span class="p">);</span>
+
+    <span class="n">lValueId</span> <span class="o">=</span> <span class="n">attribute_add_value</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="s">&quot;Wielkość L &quot;</span><span class="o">+</span><span class="n">uniqId</span><span class="p">,</span> <span class="n">attributePropertyId</span><span class="p">);</span>
+
+    <span class="c"># Dodajemy nowy wariant produktu i ustalamy jego właściwości</span>
+    <span class="c"># 2 - typ (w tym wypadku dodawanie)</span>
+    <span class="n">variantId</span> <span class="o">=</span> <span class="n">product_add_variant</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">productId</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">456.10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">attributeGroupId</span><span class="p">,</span> <span class="s">&quot;symbol&quot;</span><span class="p">,</span> <span class="mi">177</span><span class="p">)</span>
+
+    <span class="c"># Do danego wariantu przypisujemy cechę Wielkość L</span>
+    <span class="n">variant_add_value</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">variantId</span><span class="p">,</span> <span class="n">lValueId</span><span class="p">)</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;OK&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Przykład użycia</a><ul>
+<li><a class="reference internal" href="#przeglad-funkcjonalnosci">Przegląd funkcjonalności</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Instalacja</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="commands.html"
+                        title="next chapter">Pełna referencja API</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/example.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="commands.html" title="Pełna referencja API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Instalacja"
+             >previous</a> |</li>
+        <li><a href="index.html">Chameleon v0.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Marcin Biernat, Jakub Osika, Kacper Szurek.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
